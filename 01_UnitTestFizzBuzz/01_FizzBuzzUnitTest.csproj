@@ -56,7 +56,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dotNET-PWR\01_FizzBuzz.csproj">
+    <ProjectReference Include="..\01_FizzBuzz\01_FizzBuzz.csproj">
       <Project>{b9eecc11-a157-4723-9f2c-8bac3dcdb559}</Project>
       <Name>01_FizzBuzz</Name>
     </ProjectReference>
