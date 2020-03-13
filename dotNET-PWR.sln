@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzBuzz", "dotNET-PWR\FizzBuzz.csproj", "{B9EECC11-A157-4723-9F2C-8BAC3DCDB559}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_FizzBuzz", "dotNET-PWR\01_FizzBuzz.csproj", "{B9EECC11-A157-4723-9F2C-8BAC3DCDB559}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzBuzzUnitTest", "UnitTestFizzBuzz\FizzBuzzUnitTest.csproj", "{7B6AB9BC-72CE-47EB-B9E2-154793C9F4E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_FizzBuzzUnitTest", "UnitTestFizzBuzz\01_FizzBuzzUnitTest.csproj", "{7B6AB9BC-72CE-47EB-B9E2-154793C9F4E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

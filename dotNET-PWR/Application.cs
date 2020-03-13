@@ -18,23 +18,28 @@ namespace FizzBuzz
         {
             List<string> results = new List<string>();
 
-            foreach (int n in numbers)
+            foreach (int number in numbers)
             {
-                if (numberIsDividedByThree(n) && !numberIsDividedByFive(n))
+                if (isDividedBySeven(number))
                 {
-                    results.Add("Fizz");
+                    results.Add("Buzzinga");
                 }
-                else if (numberIsDividedByFive(n) && !numberIsDividedByThree(n))
-                {
-                    results.Add("Buzz");
-                }
-                else if (numberIsDividedByThree(n) && numberIsDividedByFive(n))
+                else if (isDividedByThree(number) && isDividedByFive(number)
+                    || areDigitsThreeAndFiveLocatedNextToEachOtherInside(number))
                 {
                     results.Add("FizzBuzz");
                 }
+                else if (isDividedByFive(number) || isDigitFiveInside(number))
+                {
+                    results.Add("Buzz");
+                }
+                else if (isDividedByThree(number))
+                {
+                    results.Add("Fizz");
+                }
                 else
                 {
-                    results.Add(n.ToString());
+                    results.Add(number.ToString());
                 }
 
             }
@@ -42,15 +47,30 @@ namespace FizzBuzz
             return results;
         }
 
-        private static bool numberIsDividedByThree(int number)
+        private static bool isDividedByThree(int number)
         {
             return number % 3 == 0;
         }
 
-        private static bool numberIsDividedByFive(int number)
+        private static bool isDividedByFive(int number)
         {
             return number % 5 == 0;
         }
 
+        private static bool isDividedBySeven(int number)
+        {
+            return number % 7 == 0;
+        }
+
+        private static bool areDigitsThreeAndFiveLocatedNextToEachOtherInside(int number)
+        {
+            string numberToString = number.ToString();
+            return numberToString.Contains("53") || numberToString.Contains("35");
+        }
+
+        private static bool isDigitFiveInside(int number)
+        {
+            return number.ToString().Contains("5");
+        }
     }
 }
