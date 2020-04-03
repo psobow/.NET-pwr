@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CurrencyRates"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="600">
+        Title="MainWindow" Height="720" Width="600">
 
     <Border Padding="10">
         <StackPanel>
 
+            <!-- WEB API UI -->
             <TextBlock 
                     Text="WEB API INTERFACE" 
                     FontWeight="Bold" 
                     TextWrapping="Wrap"
-                    Margin="0 10"
+                    Margin="0 0 0 10"
                     />
 
             <!-- WEB API Buttons Grid -->
@@ -145,8 +146,8 @@
             <!-- Concurency Rates From WEB API-->
             <Grid Margin="0 10 0 10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -155,7 +156,7 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" >
                     <TextBlock 
-                    Text="Concurency rates in RRRR-MM-DD" 
+                    Text="Concurency rates in RRRR-MM-DD from WEB API" 
                     FontWeight="Bold" 
                     TextWrapping="Wrap"
                     />
@@ -257,18 +258,195 @@
             </Grid>
 
 
+            <!-- DATABASE UI -->
             <TextBlock 
-                    Text="DATABASE INTERFACE" 
+                Text="DATABASE INTERFACE" 
+                FontWeight="Bold" 
+                TextWrapping="Wrap"
+                Margin="0 10"
+            />
+            <!-- Save echange rates in database 
+                Get exchange rates from database in specific date
+                Display Chart
+            -->
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Button panel -->
+                <Grid Grid.Column="0" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Upper row -->
+                    <Button
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Height="auto"
+                    Margin="0 5 0 5" 
+                    Name="save_in_database" >
+                        <TextBlock 
+                        Height="auto"
+                        Text="Save exchange rates in DB" 
+                        TextWrapping="Wrap" 
+                        TextAlignment="Center"
+                    />
+                    </Button>
+
+                    <!-- Middle row -->
+                    <Button
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Height="auto"
+                    Margin="0 5 0 5" 
+                    Name="get_exchange_rates_from_database_in_specific_date" >
+                        <TextBlock 
+                        Height="auto"
+                        Text="Get exchange rates from database in specific date" 
+                        TextWrapping="Wrap" 
+                        TextAlignment="Center"
+                    />
+                    </Button>
+
+                    <TextBlock 
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Text="Insert date: 
+                        RRRR-MM-DD"
+                        Height="auto"
+                        TextWrapping="Wrap" 
+                        TextAlignment="Center"
+                        Margin="0 5 0 5"
+                    />
+
+                    <TextBox 
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        Padding="2" 
+                        Height="auto"
+                        Margin="5 10 5 10"
+                        TextAlignment="Center"
+                    />
+                    
+                    <!-- Lower row -->
+                    <Button
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Height="auto"
+                    Margin="0 5 0 5" 
+                    Name="display_chart" >
+                        <TextBlock 
+                        Height="auto"
+                        Text="Display chart" 
+                        TextWrapping="Wrap" 
+                        TextAlignment="Center"
+                    />
+                    </Button>
+                </Grid>
+
+                <!-- Exchange rates from database-->
+                <StackPanel 
+                    Grid.Column="1" 
+                    Grid.Row="0"
+                    Margin="10 0 0 0">
+                    <TextBlock 
+                    Text="Concurency rates in RRRR-MM-DD from DB" 
                     FontWeight="Bold" 
                     TextWrapping="Wrap"
-                    Margin="0 10"
                     />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Euro Rate -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Padding="4"
+                            Text="EUR"
+                            />
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Padding="4"
+                            Text="-.-- PLN"
+                            />
+
+                        <!-- GBP Rate -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Padding="4"
+                            Text="GBP"
+                            />
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Padding="4"
+                            Text="-.-- PLN"
+                            />
+
+                        <!-- USD Rate -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="2"
+                            Padding="4"
+                            Text="USD"
+                            />
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            Padding="4"
+                            Text="-.-- PLN"
+                            />
+
+                        <!-- Gold Rate -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="3"
+                            Padding="4"
+                            Text="Gold"
+                            />
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            Padding="4"
+                            Text="-.-- PLN / Gram"
+                            />
+                    </Grid>
+                </StackPanel>
+            </Grid>
             
             
 
             <!-- TextBox Log with scroll bar -->
             <StackPanel Margin="0 10 0 0">
-                <TextBlock Text="App logs" FontWeight="Bold"/>
+                <TextBlock Text="APP LOGS" Margin="0 10" FontWeight="Bold"/>
                 <ScrollViewer 
                     HorizontalScrollBarVisibility="Disabled"
                     Height="100"
@@ -284,6 +462,30 @@
                 </ScrollViewer>
             </StackPanel>
 
+            <!-- Auxiliary App Utilities-->
+            <Grid Margin="0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel 
+                    Grid.Column="0"
+                    Grid.Row="0">
+
+                    <Button
+                        Height="Auto"
+                        Content="Reset application UI"
+                        Margin="0 5 0 5">
+                    </Button>
+
+                    <Button
+                        Height="Auto"
+                        Content="Delete all data in DB"
+                        Margin="0 5 0 5">
+                    </Button>
+                </StackPanel>
+            </Grid>
 
 
         </StackPanel>
