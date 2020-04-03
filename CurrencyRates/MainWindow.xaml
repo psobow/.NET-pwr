@@ -55,10 +55,10 @@
                     Grid.Row="1"
                     Height="auto"
                     Margin="0 0 0 0"
-                    Name="get_specific_date_exchange_rates" >
+                    Name="get_exchange_rates_from_specific_date" >
                     <TextBlock 
                         Height="auto"
-                        Text="Get specific date exchange rates" 
+                        Text="Get exchange rates from specific date" 
                         TextWrapping="Wrap" 
                         TextAlignment="Center"
                     />
@@ -81,7 +81,7 @@
                     Padding="2" 
                     Height="auto"
                     Margin="5 5 5 5"
-
+                    TextAlignment="Center"
                 />
 
                 <!-- Lower row -->
@@ -116,6 +116,7 @@
                     Padding="2" 
                     Height="auto"
                     Margin="5 15 5 5"
+                    TextAlignment="Center"
                 />
 
                 <TextBlock 
@@ -135,6 +136,7 @@
                     Padding="2" 
                     Height="auto"
                     Margin="5 15 5 5"
+                    TextAlignment="Center"
                 />
 
 
