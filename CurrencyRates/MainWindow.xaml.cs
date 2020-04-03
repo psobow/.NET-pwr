@@ -24,5 +24,87 @@ namespace CurrencyRates
         {
             InitializeComponent();
         }
+
+
+
+
+
+        // IMPLEMENT PLACE HOLDER FUNCTIONALITY
+
+        // First text box
+        private void Text_box_insert_date_1_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (text_box_insert_date_1.Text == "RRRR-MM-DD")
+            {
+                text_box_insert_date_1.Text = "";
+                text_box_insert_date_1.Foreground = Brushes.Black;
+            }
+        }
+
+        private void Text_box_insert_date_1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(text_box_insert_date_1.Text))
+            {
+                text_box_insert_date_1.Text = "RRRR-MM-DD";
+                text_box_insert_date_1.Foreground = Brushes.Gray;
+            }
+        }
+
+        // Second text box
+        private void Text_box_insert_date_2_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (text_box_insert_date_2.Text == "RRRR-MM-DD")
+            {
+                text_box_insert_date_2.Text = "";
+                text_box_insert_date_2.Foreground = Brushes.Black;
+            }
+        }
+
+        private void Text_box_insert_date_2_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(text_box_insert_date_2.Text))
+            {
+                text_box_insert_date_2.Text = "RRRR-MM-DD";
+                text_box_insert_date_2.Foreground = Brushes.Gray;
+            }
+        }
+
+        // Third text box
+        private void Text_box_insert_date_3_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if(text_box_insert_date_3.Text == "RRRR-MM-DD")
+            {
+                text_box_insert_date_3.Text = "";
+                text_box_insert_date_3.Foreground = Brushes.Black;
+            }
+        }
+
+        private void Text_box_insert_date_3_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(text_box_insert_date_3.Text))
+            {
+                text_box_insert_date_3.Text = "RRRR-MM-DD";
+                text_box_insert_date_3.Foreground = Brushes.Gray;
+            }
+        }
+
+        // Fourth text box
+        private void Text_box_insert_date_4_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (text_box_insert_date_4.Text == "RRRR-MM-DD")
+            {
+                text_box_insert_date_4.Text = "";
+                text_box_insert_date_4.Foreground = Brushes.Black;
+            }
+        }
+
+        private void Text_box_insert_date_4_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(text_box_insert_date_4.Text))
+            {
+                text_box_insert_date_4.Text = "RRRR-MM-DD";
+                text_box_insert_date_4.Foreground = Brushes.Gray;
+            }
+        }
     }
 }
