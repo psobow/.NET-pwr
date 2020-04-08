@@ -76,7 +76,7 @@
                 />
 
                 <TextBox 
-                    Name="text_box_insert_date_1"
+                    Name="textBox_insertDate_1"
                     Grid.Column="2"
                     Grid.Row="1"
                     Padding="2" 
@@ -85,7 +85,7 @@
                     VerticalAlignment="Center"
                     Text="RRRR-MM-DD" 
                     Foreground="Gray" 
-                    GotFocus="Text_box_insert_date_1_GotFocus" LostFocus="Text_box_insert_date_1_LostFocus" 
+                    GotFocus="textBox_insertDate_1_GotFocus" LostFocus="textBox_insertDate_1_LostFocus" 
                     
                 />
 
@@ -114,7 +114,7 @@
                     VerticalAlignment="Center"
                 />
 
-                <TextBox x:Name="text_box_insert_date_2" 
+                <TextBox x:Name="textBox_insertDate_2" 
                     Grid.Column="2"
                     Grid.Row="2"
                     Padding="2" 
@@ -122,7 +122,7 @@
                     VerticalAlignment="Center"
                     TextAlignment="Center"
                     Text="RRRR-MM-DD"
-                    Foreground="Gray" LostFocus="Text_box_insert_date_2_LostFocus" GotFocus="Text_box_insert_date_2_GotFocus"
+                    Foreground="Gray" LostFocus="textBox_insertDate_2_LostFocus" GotFocus="textBox_insertDate_2_GotFocus"
                 />
 
                 <TextBlock 
@@ -135,7 +135,7 @@
                     VerticalAlignment="Center"
                 />
 
-                <TextBox x:Name="text_box_insert_date_3" 
+                <TextBox x:Name="textBox_insertDate_3" 
                     Grid.Column="4"
                     Grid.Row="2"
                     Height="auto"
@@ -143,7 +143,7 @@
                     TextAlignment="Center"
                     VerticalAlignment="Center"
                     Text="RRRR-MM-DD"
-                    Foreground="Gray" GotFocus="Text_box_insert_date_3_GotFocus" LostFocus="Text_box_insert_date_3_LostFocus"
+                    Foreground="Gray" GotFocus="textBox_insertDate_3_GotFocus" LostFocus="textBox_insertDate_3_LostFocus"
                 />
 
 
@@ -336,7 +336,7 @@
                         VerticalAlignment="Center"
                     />
 
-                    <TextBox x:Name="text_box_insert_date_4" 
+                    <TextBox x:Name="textBox_insertDate_4" 
                         Grid.Column="2"
                         Grid.Row="1"
                         Height="auto"
@@ -344,7 +344,7 @@
                         TextAlignment="Center"
                         VerticalAlignment="Center"
                         Text="RRRR-MM-DD"
-                        Foreground="Gray" LostFocus="Text_box_insert_date_4_LostFocus" GotFocus="Text_box_insert_date_4_GotFocus"
+                        Foreground="Gray" LostFocus="textBox_insertDate_4_LostFocus" GotFocus="textBox_insertDate_4_GotFocus"
                     />
                     
                     <!-- Lower row -->
