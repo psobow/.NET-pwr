@@ -29,6 +29,8 @@ namespace CurrencyRates
             resetUI();
         }
 
+
+
         #region auxiliary app functionalities
 
         // RESET UI
