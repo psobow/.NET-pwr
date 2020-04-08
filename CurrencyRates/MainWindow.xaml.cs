@@ -27,18 +27,21 @@ namespace CurrencyRates
         {
             InitializeComponent();
             resetUI();
-            Loger.appBeginText(textBox_AppLoger, "App has started sucessfully");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "App has started sucessfully");
         }
 
 
+        #region web API interface implementation
 
-        #region auxiliary app functionalities
+        #endregion
+
+        #region auxiliary app functionalities implementation
 
         // RESET UI
         private void button_resetUI_Click(object sender, RoutedEventArgs e)
         {
             resetUI();
-            Loger.appBeginText(textBox_AppLoger, "App UI has been reset");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "App UI has been reset");
         }
 
 
@@ -51,9 +54,9 @@ namespace CurrencyRates
             resetTextBoxInsertDate(textBox_insertDate_4);
 
             // Reset labeles
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in RRRR-MM-DD from WEB API";
-            textBlock_LogerForDatabaseData.Text = "Concurency rates from RRRR-MM-DD to RRRR-MM-DD";
-            textBlock_DateOfDataFromDatabase.Text = "Concurency rates in RRRR-MM-DD from DB";
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + DATE_FORMAT + " from WEB API";
+            textBlock_LogerForDatabaseData.Text = "Concurency rates from " + DATE_FORMAT + " to " + DATE_FORMAT;
+            textBlock_DateOfDataFromDatabase.Text = "Concurency rates in " + DATE_FORMAT + " from DB";
 
             // Reset currency rates from web API
             textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT;
@@ -80,9 +83,7 @@ namespace CurrencyRates
 
         }
 
-        #endregion
-
-
+        #endregion 
 
         #region place holders functionality
         // IMPLEMENT PLACE HOLDER FUNCTIONALITY

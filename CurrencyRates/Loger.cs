@@ -9,7 +9,7 @@ namespace CurrencyRates
 {
     public class Loger
     {
-        public static void appBeginText(TextBox textBox, string str)
+        public static void appBeginTextWithTime(TextBox textBox, string str)
         {
             DateTime localDate = DateTime.Now;
             textBox.Text = "<" + localDate.ToLongTimeString() + "> " + str + "\n" + textBox.Text;
