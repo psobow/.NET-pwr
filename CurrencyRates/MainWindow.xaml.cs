@@ -27,6 +27,7 @@ namespace CurrencyRates
         {
             InitializeComponent();
             resetUI();
+            Loger.appBeginText(textBox_AppLoger, "App has started sucessfully");
         }
 
 
@@ -37,6 +38,7 @@ namespace CurrencyRates
         private void button_resetUI_Click(object sender, RoutedEventArgs e)
         {
             resetUI();
+            Loger.appBeginText(textBox_AppLoger, "App UI has been reset");
         }
 
 
@@ -70,8 +72,6 @@ namespace CurrencyRates
 
             // Reset app loger
             textBox_AppLoger.Text = "";
-
-            // Log information about reset UI
         }
 
         // DELETE ALL DATA IN DATABASE
