@@ -162,9 +162,10 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" >
                     <TextBlock 
-                    Text="Concurency rates in RRRR-MM-DD from WEB API" 
-                    FontWeight="Bold" 
-                    TextWrapping="Wrap"
+                        Name="textBlock_DateOfDataFromWebAPI"
+                        Text="Concurency rates in RRRR-MM-DD from WEB API" 
+                        FontWeight="Bold" 
+                        TextWrapping="Wrap"
                     />
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -187,10 +188,11 @@
                             Text="EUR"
                             />
                         <TextBlock
+                            Name="textBlock_EUR_RateFromWebAPI"
                             Grid.Column="1"
                             Grid.Row="0"
                             Padding="4"
-                            Text="-.-- PLN"
+                            Text="-.---- PLN"
                             />
 
                         <!-- GBP Rate -->
@@ -201,10 +203,11 @@
                             Text="GBP"
                             />
                         <TextBlock
+                            Name="textBlock_GBP_RateFromWebAPI"
                             Grid.Column="1"
                             Grid.Row="1"
                             Padding="4"
-                            Text="-.-- PLN"
+                            Text="-.---- PLN"
                             />
 
                         <!-- USD Rate -->
@@ -215,10 +218,11 @@
                             Text="USD"
                             />
                         <TextBlock
+                            Name="textBlock_USD_RateFromWebAPI"
                             Grid.Column="1"
                             Grid.Row="2"
                             Padding="4"
-                            Text="-.-- PLN"
+                            Text="-.---- PLN"
                             />
 
                         <!-- Gold Rate -->
@@ -229,10 +233,11 @@
                             Text="Gold"
                             />
                         <TextBlock
+                            Name="textBlock_Gold_RateFromWebAPI"
                             Grid.Column="1"
                             Grid.Row="3"
                             Padding="4"
-                            Text="-.-- PLN / Gram"
+                            Text="-.---- PLN / Gram"
                             />
                     </Grid>
                 </StackPanel>
@@ -243,17 +248,19 @@
                     Grid.Row="0"
                     >
                     <TextBlock 
-                    Text="Concurency rates from RRRR-MM-DD to RRRR-MM-DD" 
-                    FontWeight="Bold" 
-                    TextWrapping="Wrap"
+                        Name="textBlock_LogerForDatabaseData"
+                        Text="Concurency rates from RRRR-MM-DD to RRRR-MM-DD" 
+                        FontWeight="Bold" 
+                        TextWrapping="Wrap"
                     />
                     <ScrollViewer 
                         HorizontalScrollBarVisibility="Disabled"
                         Height="113"
                         CanContentScroll="True" >
                         <TextBox 
+                            Name="textBox_DatabaseLoger"
                             TextWrapping="Wrap"
-                            Text="Witam Witam"
+                            Text=""
                             IsReadOnly="True"
                             Background="#eee"
                             Padding="2"
@@ -369,9 +376,10 @@
                     Grid.Row="0"
                     Margin="10 0 0 0">
                     <TextBlock 
-                    Text="Concurency rates in RRRR-MM-DD from DB" 
-                    FontWeight="Bold" 
-                    TextWrapping="Wrap"
+                        Name="textBlock_DateOfDataFromDatabase"
+                        Text="Concurency rates in RRRR-MM-DD from DB" 
+                        FontWeight="Bold" 
+                        TextWrapping="Wrap"
                     />
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -394,10 +402,11 @@
                             Text="EUR"
                             />
                         <TextBlock
+                            Name="textBlock_EUR_RateFromDatabase"
                             Grid.Column="1"
                             Grid.Row="0"
                             Padding="4"
-                            Text="-.-- PLN"
+                            Text="-.---- PLN"
                             />
 
                         <!-- GBP Rate -->
@@ -408,10 +417,11 @@
                             Text="GBP"
                             />
                         <TextBlock
+                            Name="textBlock_GBP_RateFromDatabase"
                             Grid.Column="1"
                             Grid.Row="1"
                             Padding="4"
-                            Text="-.-- PLN"
+                            Text="-.---- PLN"
                             />
 
                         <!-- USD Rate -->
@@ -422,10 +432,11 @@
                             Text="USD"
                             />
                         <TextBlock
+                            Name="textBlock_USD_RateFromDatabase"
                             Grid.Column="1"
                             Grid.Row="2"
                             Padding="4"
-                            Text="-.-- PLN"
+                            Text="-.---- PLN"
                             />
 
                         <!-- Gold Rate -->
@@ -436,10 +447,11 @@
                             Text="Gold"
                             />
                         <TextBlock
+                            Name="textBlock_Gold_RateFromDatabase"
                             Grid.Column="1"
                             Grid.Row="3"
                             Padding="4"
-                            Text="-.-- PLN / Gram"
+                            Text="-.---- PLN / Gram"
                             />
                     </Grid>
                 </StackPanel>
@@ -455,9 +467,9 @@
                     Height="100"
                     CanContentScroll="True">
                     <TextBox 
-                        x:Name="logsTextBox" 
+                        Name="textBox_AppLoger" 
                         TextWrapping="Wrap"
-                        Text="Witam Witam"
+                        Text=""
                         IsReadOnly="True"
                         Background="#eee"
                         Padding="2"
@@ -478,9 +490,10 @@
                     Grid.Row="0">
 
                     <Button
+                        Name="button_resetUI"
                         Height="Auto"
                         Content="Reset application UI"
-                        Margin="0 0 0 5">
+                        Margin="0 0 0 5" Click="button_resetUI_Click">
                     </Button>
 
                     <Button
