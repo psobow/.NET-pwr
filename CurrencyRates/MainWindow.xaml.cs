@@ -88,7 +88,6 @@ namespace CurrencyRates
 
             bool isInputDateFormatValid = InputValidator.validateDateFormat(inputDate);
             bool isInputDateValid = InputValidator.validateDate(inputDate);
-
             bool isValid = isInputDateFormatValid && isInputDateValid; 
 
             if (isValid)

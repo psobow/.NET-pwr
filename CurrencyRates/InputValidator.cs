@@ -20,7 +20,19 @@ namespace CurrencyRates
 
         public static bool validateDate(string date)
         {
-            return true;
+            return IsDate(date);
+        }
+
+        private static bool IsDate(string tempDate)
+        {
+            DateTime fromDateValue;
+            var formats = new[] { DATE_FORMAT };
+            return (DateTime.TryParseExact(
+                tempDate, 
+                formats, 
+                System.Globalization.CultureInfo.InvariantCulture, 
+                System.Globalization.DateTimeStyles.None, 
+                out fromDateValue));
         }
     }
 }
