@@ -27,7 +27,10 @@ namespace CurrencyRates
         }
 
 
+
+        #region get actual rates
         // GET ACTUAL RATES
+
         public async Task<string> getActualEURRateAsync()
         {
             return await GetActualCurrencyAsync("EUR");
@@ -83,7 +86,7 @@ namespace CurrencyRates
             // Check if array supported currency names contains string currency
             return supportedCurrencyNames.ToList().Any(x => x.Equals(currency));
         }
-
+        #endregion
 
         // GET SPECIFIC DATE RATES
 

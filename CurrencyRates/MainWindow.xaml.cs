@@ -21,16 +21,15 @@ namespace CurrencyRates
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string DATE_FORMAT = "YYYY-MM-DD";
+        private const string DATE_FORMAT = "yyyy-MM-dd";
         private const string CURRENCY_RATE_FORMAT = "-.---- PLN";
         private ClientNBP clientNBP = ClientNBP.Instance;
 
-        // Currency rates
-        private double EURRate;
-        private double USDRate;
-        private double GBPRate;
-        private double GoldRate;
-        private DateTime dataDate;
+        // current currency rates from web API references
+        private CurrencyModel currentEUR;
+        private CurrencyModel currentUSD;
+        private CurrencyModel currentGBP;
+        private GoldModel currentGold;
 
         public MainWindow()
         {
@@ -61,20 +60,22 @@ namespace CurrencyRates
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
             // Map JSON  to POCO
-            CurrencyModel eur = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
-            CurrencyModel usd = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
-            CurrencyModel gbp = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
-            GoldModel[] gold = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON);
+            currentEUR = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
+            currentUSD = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
+            currentGBP = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
+            currentGold = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0];
+
+            // Extract current currencies date
+            DateTime currentCurrencyRatesDate = currentEUR.rates[0].effectiveDate;
 
             // Extract currency rates
-            dataDate = eur.rates[0].effectiveDate;
-            EURRate = eur.rates[0].mid;
-            USDRate = usd.rates[0].mid;
-            GBPRate = gbp.rates[0].mid;
-            GoldRate = gold[0].cena;
+            double EURRate = currentEUR.rates[0].mid;
+            double USDRate = currentUSD.rates[0].mid;
+            double GBPRate = currentGBP.rates[0].mid;
+            double GoldRate = currentGold.cena;
 
             // Update UI 
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + dataDate.ToString("yyyy-MM-dd") + " from WEB API";
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + currentCurrencyRatesDate.ToString(DATE_FORMAT) + " from WEB API";
             textBlock_EUR_RateFromWebAPI.Text = EURRate.ToString() + " PLN";
             textBlock_USD_RateFromWebAPI.Text = USDRate.ToString() + " PLN";
             textBlock_GBP_RateFromWebAPI.Text = GBPRate.ToString() + " PLN";
