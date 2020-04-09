@@ -28,7 +28,7 @@ namespace CurrencyRates
         private CurrencyModel EURFromWebAPI;
         private CurrencyModel USDFromWebAPI;
         private CurrencyModel GBPFromWebAPI;
-        private GoldModel GoldFromWebAPI;
+        private GoldModel[] GoldFromWebAPI;
 
         public MainWindow()
         {
@@ -62,19 +62,19 @@ namespace CurrencyRates
             EURFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
             USDFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
             GBPFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
-            GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0];
+            GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON);
 
             // Extract current currencies date
             DateTime EURDate = EURFromWebAPI.rates[0].effectiveDate;
             DateTime USDDate = USDFromWebAPI.rates[0].effectiveDate;
             DateTime GBPDate = GBPFromWebAPI.rates[0].effectiveDate;
-            DateTime GoldDate = GoldFromWebAPI.data;
+            DateTime GoldDate = GoldFromWebAPI[0].data;
 
             // Extract currency rates
             double EURRate = EURFromWebAPI.rates[0].mid;
             double USDRate = USDFromWebAPI.rates[0].mid;
             double GBPRate = GBPFromWebAPI.rates[0].mid;
-            double GoldRate = GoldFromWebAPI.cena;
+            double GoldRate = GoldFromWebAPI[0].cena;
 
             // Update UI 
             textBlock_EUR_RateFromWebAPI.Text = EURRate.ToString() + " PLN";
@@ -86,12 +86,18 @@ namespace CurrencyRates
             textBlock_USD_RateFromWebAPI_Date.Text = USDDate.ToString(InputValidator.DATE_FORMAT);
             textBlock_GBP_RateFromWebAPI_Date.Text = GBPDate.ToString(InputValidator.DATE_FORMAT);
             textBlock_Gold_RateFromWebAPI_Date.Text = GoldDate.ToString(InputValidator.DATE_FORMAT);
+
+            // Clear database loger
+            textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
+            textBox_DatabaseLoger.Text = "";
         }
 
         private async void button_getExchangesRatesFromSpecificDate_Click(object sender, RoutedEventArgs e)
         {
+            // Read input
             string inputDate = textBox_insertDate_1.Text;
 
+            // Validate input
             bool isInputDateFormatValid = InputValidator.validateDateFormat(inputDate);
             bool isInputDateValid = InputValidator.validateDate(inputDate);
             bool isValid = isInputDateFormatValid && isInputDateValid; 
@@ -119,13 +125,13 @@ namespace CurrencyRates
                 EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
                 USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
                 GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
-                GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0] : null;
+                GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
 
                 // Extract currency rates if objects presents
                 double? EURRate = EURFromWebAPI?.rates[0].mid;
                 double? USDRate = USDFromWebAPI?.rates[0].mid;
                 double? GBPRate = GBPFromWebAPI?.rates[0].mid;
-                double? GoldRate = GoldFromWebAPI?.cena;
+                double? GoldRate = GoldFromWebAPI[0]?.cena;
 
                 // Update UI 
                 textBlock_EUR_RateFromWebAPI.Text = (EURRate.HasValue ? EURRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
@@ -137,6 +143,10 @@ namespace CurrencyRates
                 textBlock_USD_RateFromWebAPI_Date.Text = inputDate;
                 textBlock_GBP_RateFromWebAPI_Date.Text = inputDate;
                 textBlock_Gold_RateFromWebAPI_Date.Text = inputDate;
+
+                // Clear database loger
+                textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
+                textBox_DatabaseLoger.Text = "";
             }
             else if (!isInputDateFormatValid)
             {
@@ -145,6 +155,91 @@ namespace CurrencyRates
             else
             {
                 MessageBox.Show("Invalid date. Please insert valid date!", "WEB API INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void button_get_exchange_rates_from_the_time_period_Click(object sender, RoutedEventArgs e)
+        {
+            // Read input
+            string inputStartDate = textBox_insertDate_2.Text;
+            string inputEndDate = textBox_insertDate_3.Text;
+
+            // Validate input
+            bool isInputStartDateFormatValid = InputValidator.validateDateFormat(inputStartDate);
+            bool isInputStartDateValid = InputValidator.validateDate(inputStartDate);
+
+            bool isInputEndDateFormatValid = InputValidator.validateDateFormat(inputEndDate);
+            bool isInputEndDateValid = InputValidator.validateDate(inputEndDate);
+
+            bool isValid = isInputStartDateFormatValid && isInputStartDateValid
+                && isInputEndDateFormatValid && isInputEndDateValid;
+
+            if (isValid)
+            {
+                // Send HTTP requests
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for EUR rate from " + inputStartDate + " to " + inputEndDate + "...\n");
+                string eurResponseJSON = await clientNBP.getEURFromPeriodOfTime(inputStartDate, inputEndDate);
+
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for USD rate from " + inputStartDate + " to " + inputEndDate + "...\n");
+                string usdResponseJSON = await clientNBP.getUSDFromPeriodOfTime(inputStartDate, inputEndDate);
+
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for GBP rate from " + inputStartDate + " to " + inputEndDate + "...\n");
+                string gbpResponseJSON = await clientNBP.getGBPFromPeriodOfTime(inputStartDate, inputEndDate);
+
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for Gold rate from " + inputStartDate + " to " + inputEndDate + "...\n");
+                string goldResponseJSON = await clientNBP.getGoldFromPeriodOfTime(inputStartDate, inputEndDate);
+                //Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
+
+                // Map JSON to POCO if JSON's presents
+                EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
+                USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
+                GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
+                GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
+
+                // Print output
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Printing output in database loger...");
+
+                string output = "Currency rates from " + inputStartDate + " to " + inputEndDate + "\n";
+
+                EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                output += "\n";
+                USDFromWebAPI.rates.ToList().ForEach(x => output = output + "USD: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                output += "\n";
+                GBPFromWebAPI.rates.ToList().ForEach(x => output = output + "GBP: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                output += "\n";
+                GoldFromWebAPI.ToList().ForEach(x => output = output + "Gold: " + x.cena + "   " + x.data.ToString(InputValidator.DATE_FORMAT) + "\n");
+                //EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+
+                Loger.appBeginTextWithTime(textBox_DatabaseLoger, output);
+
+
+                // Update UI
+                textBlock_LogerForDatabaseData.Text = "Concurency rates from " + inputStartDate + " to " + inputEndDate;
+                // Reset currency rates from web API
+                textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
+                textBlock_GBP_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
+                textBlock_USD_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
+                textBlock_Gold_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN / Gram";
+                // Reset dates
+                textBlock_EUR_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+                textBlock_GBP_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+                textBlock_USD_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+                textBlock_Gold_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+
+
+
+            }
+            else if (!isInputStartDateFormatValid || !isInputEndDateFormatValid)
+            {
+                MessageBox.Show("Invalid date format. Please insert start date and end date in given format: " + InputValidator.DATE_FORMAT, "WEB API INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else if (!isInputStartDateValid)
+            {
+                MessageBox.Show("Invalid start date. Please insert valid start date!", "WEB API INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show("Invalid end date. Please insert valid end date!", "WEB API INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

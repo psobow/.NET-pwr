@@ -96,7 +96,7 @@
                     Grid.Row="2"
                     Height="auto"
                     Margin="0 10 0 0"
-                    Name="get_exchange_rates_from_the_time_period" >
+                    Name="button_get_exchange_rates_from_the_time_period" Click="button_get_exchange_rates_from_the_time_period_Click" >
                     <TextBlock 
                         Height="auto"
                         Text="Get exchange rates from the time period" 
@@ -283,7 +283,7 @@
                     >
                     <TextBlock 
                         Name="textBlock_LogerForDatabaseData"
-                        Text="Concurency rates from RRRR-MM-DD to RRRR-MM-DD" 
+                        Text="Concurency rates from yyyy-MM-dd to yyyy-MM-dd" 
                         FontWeight="Bold" 
                         TextWrapping="Wrap"
                     />

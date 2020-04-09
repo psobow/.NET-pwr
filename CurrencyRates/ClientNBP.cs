@@ -76,39 +76,62 @@ namespace CurrencyRates
 
         #endregion
 
+        #region get specific date currency rates
         // GET SPECIFIC DATE RATES
         // TODO: implement date validation
 
         public async Task<string> getEURFromSpecificDateAsync(string date)
         {
-            bool isDateValid = true;
             string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/EUR/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
         public async Task<string> getUSDFromSpecificDateAsync(string date)
         {
-            bool isDateValid = true;
             string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/USD/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
         public async Task<string> getGBPFromSpecificDateAsync(string date)
         {
-            bool isDateValid = true;
             string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
         public async Task<string> getGoldFromSpecificDateAsync(string date)
         {
-            bool isDateValid = true;
             string uri = NBP_API_BASE_URL + "/cenyzlota/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
+        #endregion
 
+        #region get period of time currency rates
 
+        public async Task<string> getEURFromPeriodOfTime(string startDate, string endDate)
+        {
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/EUR/" + startDate + "/" + endDate + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+
+        public async Task<string> getUSDFromPeriodOfTime(string startDate, string endDate)
+        {
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/USD/" + startDate + "/" + endDate + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+
+        public async Task<string> getGBPFromPeriodOfTime(string startDate, string endDate)
+        {
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP/" + startDate + "/" + endDate + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+
+        public async Task<string> getGoldFromPeriodOfTime(string startDate, string endDate)
+        {
+            string uri = NBP_API_BASE_URL + "/cenyzlota/" + startDate + "/" + endDate + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+        #endregion
     }
 
 }
