@@ -26,7 +26,7 @@ namespace CurrencyRates
             }
         }
 
-        public async Task<string> GetAsync(string currency)
+        public async Task<string> GetCurrencyAsync(string currency)
         { 
             bool isCurrencyValid = validateCurrency(currency);
 
@@ -47,21 +47,34 @@ namespace CurrencyRates
             }
         }
 
-
-/*        public string Get(string currency)
+        public async Task<string> GetGoldPrizeAsync()
         {
-            string uri = (NBP_API_BASE_URL + "/" + currency + "/?format=json");
+            string uri = "http://api.nbp.pl/api/cenyzlota/?format=json";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
             using (Stream stream = response.GetResponseStream())
             using (StreamReader reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd();
+                return await reader.ReadToEndAsync();
             }
         }
-        */
+
+        /*        public string Get(string currency)
+                {
+                    string uri = (NBP_API_BASE_URL + "/" + currency + "/?format=json");
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+                */
 
         private bool validateCurrency(string currency)
         {

@@ -21,7 +21,7 @@ namespace CurrencyRates
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string DATE_FORMAT = "RRRR-MM-DD";
+        private const string DATE_FORMAT = "YYYY-MM-DD";
         private const string CURRENCY_RATE_FORMAT = "-.---- PLN";
         private ClientNBP clientNBP = ClientNBP.Instance;
 
@@ -37,22 +37,41 @@ namespace CurrencyRates
         private async void get_actual_exchange_rates_Click(object sender, RoutedEventArgs e)
         {
             // Send HTTP requests
-            string eurResponseJSON = await clientNBP.GetAsync("EUR");
+            string eurResponseJSON = await clientNBP.GetCurrencyAsync("EUR");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/EUR/?format=json");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
-            string usdResponseJSON = await clientNBP.GetAsync("USD");
+            string usdResponseJSON = await clientNBP.GetCurrencyAsync("USD");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/USD/?format=json");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
-            string gbpResponseJSON = await clientNBP.GetAsync("GBP");
+            string gbpResponseJSON = await clientNBP.GetCurrencyAsync("GBP");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/GBP/?format=json");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
+
+            string goldResponseJSON = await clientNBP.GetGoldPrizeAsync();
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/cenyzlota/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
             // Map JSON  to POCO
             CurrencyModel eur = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
             CurrencyModel usd = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
             CurrencyModel gbp = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
+            GoldModel[] gold = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON);
+
+            // Extract currency rates
+            DateTime date = eur.rates[0].effectiveDate;
+            double eurRate = eur.rates[0].mid;
+            double usdRate = usd.rates[0].mid;
+            double gbpRate = gbp.rates[0].mid;
+            double goldRate = gold[0].cena;
+
+            // Update UI 
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + date.ToString("yyyy-MM-dd") + " from WEB API";
+            textBlock_EUR_RateFromWebAPI.Text = eurRate.ToString() + " PLN";
+            textBlock_USD_RateFromWebAPI.Text = usdRate.ToString() + " PLN";
+            textBlock_GBP_RateFromWebAPI.Text = gbpRate.ToString() + " PLN";
+            textBlock_Gold_RateFromWebAPI.Text = goldRate.ToString() + " PLN / Gram";
 
         }
         #endregion

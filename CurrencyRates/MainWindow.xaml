@@ -83,7 +83,7 @@
                     Height="auto"
                     TextAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="RRRR-MM-DD" 
+                    Text="YYYY-MM-DD" 
                     Foreground="Gray" 
                     GotFocus="textBox_insertDate_1_GotFocus" LostFocus="textBox_insertDate_1_LostFocus" 
                     
@@ -121,7 +121,7 @@
                     Height="auto"
                     VerticalAlignment="Center"
                     TextAlignment="Center"
-                    Text="RRRR-MM-DD"
+                    Text="YYYY-MM-DD"
                     Foreground="Gray" LostFocus="textBox_insertDate_2_LostFocus" GotFocus="textBox_insertDate_2_GotFocus"
                 />
 
@@ -142,7 +142,7 @@
                     Padding="2"
                     TextAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="RRRR-MM-DD"
+                    Text="YYYY-MM-DD"
                     Foreground="Gray" GotFocus="textBox_insertDate_3_GotFocus" LostFocus="textBox_insertDate_3_LostFocus"
                 />
 
@@ -350,7 +350,7 @@
                         Padding="2"
                         TextAlignment="Center"
                         VerticalAlignment="Center"
-                        Text="RRRR-MM-DD"
+                        Text="YYYY-MM-DD"
                         Foreground="Gray" LostFocus="textBox_insertDate_4_LostFocus" GotFocus="textBox_insertDate_4_GotFocus"
                     />
                     
