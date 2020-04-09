@@ -65,7 +65,10 @@ namespace CurrencyRates
             GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0];
 
             // Extract current currencies date
-            DateTime currentCurrencyRatesDate = EURFromWebAPI.rates[0].effectiveDate;
+            DateTime EURDate = EURFromWebAPI.rates[0].effectiveDate;
+            DateTime USDDate = USDFromWebAPI.rates[0].effectiveDate;
+            DateTime GBPDate = GBPFromWebAPI.rates[0].effectiveDate;
+            DateTime GoldDate = GoldFromWebAPI.data;
 
             // Extract currency rates
             double EURRate = EURFromWebAPI.rates[0].mid;
@@ -74,12 +77,15 @@ namespace CurrencyRates
             double GoldRate = GoldFromWebAPI.cena;
 
             // Update UI 
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + currentCurrencyRatesDate.ToString(InputValidator.DATE_FORMAT) + " from WEB API";
             textBlock_EUR_RateFromWebAPI.Text = EURRate.ToString() + " PLN";
             textBlock_USD_RateFromWebAPI.Text = USDRate.ToString() + " PLN";
             textBlock_GBP_RateFromWebAPI.Text = GBPRate.ToString() + " PLN";
             textBlock_Gold_RateFromWebAPI.Text = GoldRate.ToString() + " PLN / Gram";
 
+            textBlock_EUR_RateFromWebAPI_Date.Text = EURDate.ToString(InputValidator.DATE_FORMAT);
+            textBlock_USD_RateFromWebAPI_Date.Text = USDDate.ToString(InputValidator.DATE_FORMAT);
+            textBlock_GBP_RateFromWebAPI_Date.Text = GBPDate.ToString(InputValidator.DATE_FORMAT);
+            textBlock_Gold_RateFromWebAPI_Date.Text = GoldDate.ToString(InputValidator.DATE_FORMAT);
         }
 
         private async void button_getExchangesRatesFromSpecificDate_Click(object sender, RoutedEventArgs e)
@@ -122,11 +128,15 @@ namespace CurrencyRates
                 double? GoldRate = GoldFromWebAPI?.cena;
 
                 // Update UI 
-                textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + inputDate + " from WEB API";
                 textBlock_EUR_RateFromWebAPI.Text = (EURRate.HasValue ? EURRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
                 textBlock_USD_RateFromWebAPI.Text = (USDRate.HasValue ? USDRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
                 textBlock_GBP_RateFromWebAPI.Text = (GBPRate.HasValue ? GBPRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
                 textBlock_Gold_RateFromWebAPI.Text = (GoldRate.HasValue ? GoldRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN / Gram";
+
+                textBlock_EUR_RateFromWebAPI_Date.Text = inputDate;
+                textBlock_USD_RateFromWebAPI_Date.Text = inputDate;
+                textBlock_GBP_RateFromWebAPI_Date.Text = inputDate;
+                textBlock_Gold_RateFromWebAPI_Date.Text = inputDate;
             }
             else if (!isInputDateFormatValid)
             {
@@ -165,9 +175,9 @@ namespace CurrencyRates
             resetTextBoxInsertDate(textBox_insertDate_4);
 
             // Reset labeles
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + InputValidator.DATE_FORMAT + " from WEB API";
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates from WEB API";
             textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
-            textBlock_DateOfDataFromDatabase.Text = "Concurency rates in " + InputValidator.DATE_FORMAT + " from DB";
+            textBlock_DateOfDataFromDatabase.Text = "Concurency rates from DB";
 
             // Reset currency rates from web API
             textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
@@ -175,12 +185,24 @@ namespace CurrencyRates
             textBlock_USD_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
             textBlock_Gold_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN / Gram";
 
+            // Reset dates
+            textBlock_EUR_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+            textBlock_GBP_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+            textBlock_USD_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+            textBlock_Gold_RateFromWebAPI_Date.Text = InputValidator.DATE_FORMAT;
+
             // Reset currency rates from DB
             textBlock_EUR_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN";
             textBlock_GBP_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN";
             textBlock_USD_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN";
             textBlock_Gold_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN / Gram";
 
+            // Reset dates
+            textBlock_EUR_RateFromDB_Date.Text = InputValidator.DATE_FORMAT;
+            textBlock_GBP_RateFromDB_Date.Text = InputValidator.DATE_FORMAT;
+            textBlock_USD_RateFromDB_Date.Text = InputValidator.DATE_FORMAT;
+            textBlock_Gold_RateFromDB_Date.Text = InputValidator.DATE_FORMAT;
+            
             // Reset database loger
             textBox_DatabaseLoger.Text = "";
 
