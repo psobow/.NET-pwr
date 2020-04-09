@@ -10,9 +10,9 @@ namespace CurrencyRates
 {
     public sealed class ClientNBP
     {
-        private readonly string[] supportedCurrencyNames = { "EUR", "USD", "GBP" };
         private readonly string NBP_API_BASE_URL = "http://api.nbp.pl/api";
-        
+        private readonly string RESPONSE_FORMAT = "?format=json";
+
         // Singleton
         private ClientNBP()
         {
@@ -27,68 +27,86 @@ namespace CurrencyRates
         }
 
 
+        private async Task<string> sendGetAsync(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return await reader.ReadToEndAsync();
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
 
         #region get actual rates
         // GET ACTUAL RATES
 
-        public async Task<string> getActualEURRateAsync()
+        public async Task<string> getCurrentEURAsync()
         {
-            return await GetActualCurrencyAsync("EUR");
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/EUR" + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
         }
 
-        public async Task<string> getActualUSDRateAsync()
+        public async Task<string> getCurrentUSDAsync()
         {
-            return await GetActualCurrencyAsync("USD");
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/USD" + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
         }
 
-        public async Task<string> getActualGBPRateAsync()
+        public async Task<string> getCurrentGBPAsync()
         {
-            return await GetActualCurrencyAsync("GBP");
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP" + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
         }
 
-        public async Task<string> getActualGoldPrizeAsync()
+        public async Task<string> getCurrentGoldPrizeAsync()
         {
-            string uri = "http://api.nbp.pl/api/cenyzlota/?format=json";
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return await reader.ReadToEndAsync();
-            }
+            string uri = NBP_API_BASE_URL + "/cenyzlota" + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
         }
 
-        private async Task<string> GetActualCurrencyAsync(string currency)
-        {
-            bool isCurrencyValid = validateCurrency(currency);
-
-            if (!isCurrencyValid)
-            {
-                throw new System.ArgumentException("Parameter currency name has to be string EUR or USD or GBP", "currency");
-            }
-
-            string uri = (NBP_API_BASE_URL + "/exchangerates/rates/a/" + currency + "/?format=json");
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return await reader.ReadToEndAsync();
-            }
-        }
-
-        private bool validateCurrency(string currency)
-        {
-            // Check if array supported currency names contains string currency
-            return supportedCurrencyNames.ToList().Any(x => x.Equals(currency));
-        }
         #endregion
 
         // GET SPECIFIC DATE RATES
+        // TODO: implement date validation
+
+        public async Task<string> getEURFromSpecificDateAsync(string date)
+        {
+            bool isDateValid = true;
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/EUR" + date + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+
+        public async Task<string> getUSDFromSpecificDateAsync(string date)
+        {
+            bool isDateValid = true;
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/USD" + date + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+
+        public async Task<string> getGBPFromSpecificDateAsync(string date)
+        {
+            bool isDateValid = true;
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP" + date + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
+
+        public async Task<string> getGoldFromSpecificDateAsync(string date)
+        {
+            bool isDateValid = true;
+            string uri = NBP_API_BASE_URL + "/cenyzlota/" + date + RESPONSE_FORMAT;
+            return await sendGetAsync(uri);
+        }
 
 
 

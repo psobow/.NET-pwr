@@ -44,19 +44,19 @@ namespace CurrencyRates
         {
             // Send HTTP requests
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual EURO rate...");
-            string eurResponseJSON = await clientNBP.getActualEURRateAsync();
+            string eurResponseJSON = await clientNBP.getCurrentEURAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual USD rate...");
-            string usdResponseJSON = await clientNBP.getActualUSDRateAsync();
+            string usdResponseJSON = await clientNBP.getCurrentUSDAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual GBP rate...");
-            string gbpResponseJSON = await clientNBP.getActualGBPRateAsync();
+            string gbpResponseJSON = await clientNBP.getCurrentGBPAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual Gold rate...");
-            string goldResponseJSON = await clientNBP.getActualGoldPrizeAsync();
+            string goldResponseJSON = await clientNBP.getCurrentGoldPrizeAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
             // Map JSON  to POCO
