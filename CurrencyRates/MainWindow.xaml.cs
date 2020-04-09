@@ -22,7 +22,8 @@ namespace CurrencyRates
     {
         private const string DATE_FORMAT = "RRRR-MM-DD";
         private const string CURRENCY_RATE_FORMAT = "-.---- PLN";
-        
+        private ClientNBP clientNBP = ClientNBP.Instance;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,7 +33,22 @@ namespace CurrencyRates
 
 
         #region web API interface implementation
+        private async void get_actual_exchange_rates_Click(object sender, RoutedEventArgs e)
+        {
+            string eurResponseJSON = await clientNBP.GetAsync("EUR");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/EUR/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
+            string usdResponseJSON = await clientNBP.GetAsync("USD");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/USD/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
+
+            string gbpResponseJSON = await clientNBP.GetAsync("GBP");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/GBP/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
+
+
+        }
         #endregion
 
         #region auxiliary app functionalities implementation
