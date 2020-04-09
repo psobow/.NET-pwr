@@ -22,14 +22,14 @@ namespace CurrencyRates
     public partial class MainWindow : Window
     {
         private const string DATE_FORMAT = "yyyy-MM-dd";
-        private const string CURRENCY_RATE_FORMAT = "-.---- PLN";
+        private const string CURRENCY_RATE_FORMAT = "-.----";
         private ClientNBP clientNBP = ClientNBP.Instance;
 
         // current currency rates from web API references
-        private CurrencyModel currentEUR;
-        private CurrencyModel currentUSD;
-        private CurrencyModel currentGBP;
-        private GoldModel currentGold;
+        private CurrencyModel EURFromWebAPI;
+        private CurrencyModel USDFromWebAPI;
+        private CurrencyModel GBPFromWebAPI;
+        private GoldModel GoldFromWebAPI;
 
         public MainWindow()
         {
@@ -60,19 +60,19 @@ namespace CurrencyRates
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
             // Map JSON  to POCO
-            currentEUR = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
-            currentUSD = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
-            currentGBP = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
-            currentGold = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0];
+            EURFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
+            USDFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
+            GBPFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
+            GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0];
 
             // Extract current currencies date
-            DateTime currentCurrencyRatesDate = currentEUR.rates[0].effectiveDate;
+            DateTime currentCurrencyRatesDate = EURFromWebAPI.rates[0].effectiveDate;
 
             // Extract currency rates
-            double EURRate = currentEUR.rates[0].mid;
-            double USDRate = currentUSD.rates[0].mid;
-            double GBPRate = currentGBP.rates[0].mid;
-            double GoldRate = currentGold.cena;
+            double EURRate = EURFromWebAPI.rates[0].mid;
+            double USDRate = USDFromWebAPI.rates[0].mid;
+            double GBPRate = GBPFromWebAPI.rates[0].mid;
+            double GoldRate = GoldFromWebAPI.cena;
 
             // Update UI 
             textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + currentCurrencyRatesDate.ToString(DATE_FORMAT) + " from WEB API";
@@ -83,12 +83,48 @@ namespace CurrencyRates
 
         }
 
-        private void button_getExchangesRatesFromSpecificDate_Click(object sender, RoutedEventArgs e)
+        private async void button_getExchangesRatesFromSpecificDate_Click(object sender, RoutedEventArgs e)
         {
-            string inputData = textBox_insertDate_1.Text;
+            string inputDate = textBox_insertDate_1.Text;
 
             bool isInputDataValid = true; // TODO: implement input validator
 
+
+            // Send HTTP requests
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for EURO rate from " + inputDate + "...\n");
+            string eurResponseJSON = await clientNBP.getEURFromSpecificDateAsync(inputDate);
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
+
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for USD rate from " + inputDate + "...\n");
+            string usdResponseJSON = await clientNBP.getUSDFromSpecificDateAsync(inputDate);
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
+
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for GBP rate from " + inputDate + "...\n");
+            string gbpResponseJSON = await clientNBP.getGBPFromSpecificDateAsync(inputDate);
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
+
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for Gold rate from " + inputDate + "...\n");
+            string goldResponseJSON = await clientNBP.getCurrentGoldPrizeAsync();
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
+
+            // Map JSON to POCO if JSON's presents
+            EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
+            USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
+            GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
+            GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0] : null;
+
+            // Extract currency rates if objects presents
+            double? EURRate = EURFromWebAPI?.rates[0].mid;
+            double? USDRate = USDFromWebAPI?.rates[0].mid;
+            double? GBPRate = GBPFromWebAPI?.rates[0].mid;
+            double? GoldRate = GoldFromWebAPI?.cena;
+
+            // Update UI 
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + inputDate + " from WEB API";
+            textBlock_EUR_RateFromWebAPI.Text = (EURRate.HasValue ?  EURRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+            textBlock_USD_RateFromWebAPI.Text = (USDRate.HasValue ? USDRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+            textBlock_GBP_RateFromWebAPI.Text = (GBPRate.HasValue ? GBPRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+            textBlock_Gold_RateFromWebAPI.Text = (GoldRate.HasValue ? GoldRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN / Gram";
         }
 
         #endregion
@@ -102,10 +138,10 @@ namespace CurrencyRates
             Loger.appBeginTextWithTime(textBox_AppLoger, "App UI has been reset");
 
             // Reset objects references
-            currentEUR = null;
-            currentUSD = null;
-            currentGBP = null;
-            currentGold = null;
+            EURFromWebAPI = null;
+            USDFromWebAPI = null;
+            GBPFromWebAPI = null;
+            GoldFromWebAPI = null;
     }
 
 
@@ -123,16 +159,16 @@ namespace CurrencyRates
             textBlock_DateOfDataFromDatabase.Text = "Concurency rates in " + DATE_FORMAT + " from DB";
 
             // Reset currency rates from web API
-            textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT;
-            textBlock_GBP_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT;
-            textBlock_USD_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT;
-            textBlock_Gold_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT;
+            textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
+            textBlock_GBP_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
+            textBlock_USD_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
+            textBlock_Gold_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN / Gram";
 
             // Reset currency rates from DB
-            textBlock_EUR_RateFromDatabase.Text = CURRENCY_RATE_FORMAT;
-            textBlock_GBP_RateFromDatabase.Text = CURRENCY_RATE_FORMAT;
-            textBlock_USD_RateFromDatabase.Text = CURRENCY_RATE_FORMAT;
-            textBlock_Gold_RateFromDatabase.Text = CURRENCY_RATE_FORMAT;
+            textBlock_EUR_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN";
+            textBlock_GBP_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN";
+            textBlock_USD_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN";
+            textBlock_Gold_RateFromDatabase.Text = CURRENCY_RATE_FORMAT + " PLN / Gram";
 
             // Reset database loger
             textBox_DatabaseLoger.Text = "";

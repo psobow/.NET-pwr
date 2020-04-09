@@ -29,21 +29,20 @@ namespace CurrencyRates
 
         private async Task<string> sendGetAsync(string uri)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
+            try
             {
-                if (response.StatusCode == HttpStatusCode.OK)
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
                 {
                     return await reader.ReadToEndAsync();
                 }
-                else
-                {
-                    return "";
-                }
+            }
+            catch (WebException ex)
+            {
+                return "";
             }
         }
 
@@ -83,21 +82,21 @@ namespace CurrencyRates
         public async Task<string> getEURFromSpecificDateAsync(string date)
         {
             bool isDateValid = true;
-            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/EUR" + date + RESPONSE_FORMAT;
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/EUR/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
         public async Task<string> getUSDFromSpecificDateAsync(string date)
         {
             bool isDateValid = true;
-            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/USD" + date + RESPONSE_FORMAT;
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/USD/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
         public async Task<string> getGBPFromSpecificDateAsync(string date)
         {
             bool isDateValid = true;
-            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP" + date + RESPONSE_FORMAT;
+            string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP/" + date + RESPONSE_FORMAT;
             return await sendGetAsync(uri);
         }
 
