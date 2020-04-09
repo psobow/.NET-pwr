@@ -11,7 +11,7 @@ namespace CurrencyRates
     public sealed class ClientNBP
     {
         private readonly string[] supportedCurrencyNames = { "EUR", "USD", "GBP" };
-        private readonly string NBP_API_BASE_URL = "http://api.nbp.pl/api/exchangerates/rates/a";
+        private readonly string NBP_API_BASE_URL = "http://api.nbp.pl/api";
         
         // Singleton
         private ClientNBP()
@@ -26,28 +26,24 @@ namespace CurrencyRates
             }
         }
 
-        public async Task<string> GetCurrencyAsync(string currency)
-        { 
-            bool isCurrencyValid = validateCurrency(currency);
 
-            if (!isCurrencyValid)
-            {
-                throw new System.ArgumentException("Parameter currency name has to be string EUR or USD or GBP", "currency");
-            }
-
-            string uri = (NBP_API_BASE_URL + "/" + currency + "/?format=json");
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return await reader.ReadToEndAsync();
-            }
+        // GET ACTUAL RATES
+        public async Task<string> getActualEURRateAsync()
+        {
+            return await GetActualCurrencyAsync("EUR");
         }
 
-        public async Task<string> GetGoldPrizeAsync()
+        public async Task<string> getActualUSDRateAsync()
+        {
+            return await GetActualCurrencyAsync("USD");
+        }
+
+        public async Task<string> getActualGBPRateAsync()
+        {
+            return await GetActualCurrencyAsync("GBP");
+        }
+
+        public async Task<string> getActualGoldPrizeAsync()
         {
             string uri = "http://api.nbp.pl/api/cenyzlota/?format=json";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
@@ -61,26 +57,38 @@ namespace CurrencyRates
             }
         }
 
-        /*        public string Get(string currency)
-                {
-                    string uri = (NBP_API_BASE_URL + "/" + currency + "/?format=json");
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        private async Task<string> GetActualCurrencyAsync(string currency)
+        {
+            bool isCurrencyValid = validateCurrency(currency);
 
-                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                    using (Stream stream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
-                */
+            if (!isCurrencyValid)
+            {
+                throw new System.ArgumentException("Parameter currency name has to be string EUR or USD or GBP", "currency");
+            }
+
+            string uri = (NBP_API_BASE_URL + "/exchangerates/rates/a/" + currency + "/?format=json");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
 
         private bool validateCurrency(string currency)
         {
             // Check if array supported currency names contains string currency
             return supportedCurrencyNames.ToList().Any(x => x.Equals(currency));
         }
+
+
+        // GET SPECIFIC DATE RATES
+
+
+
     }
 
 }

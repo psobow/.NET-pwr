@@ -25,6 +25,13 @@ namespace CurrencyRates
         private const string CURRENCY_RATE_FORMAT = "-.---- PLN";
         private ClientNBP clientNBP = ClientNBP.Instance;
 
+        // Currency rates
+        private double EURRate;
+        private double USDRate;
+        private double GBPRate;
+        private double GoldRate;
+        private DateTime dataDate;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,20 +44,20 @@ namespace CurrencyRates
         private async void get_actual_exchange_rates_Click(object sender, RoutedEventArgs e)
         {
             // Send HTTP requests
-            string eurResponseJSON = await clientNBP.GetCurrencyAsync("EUR");
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/EUR/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual EURO rate...");
+            string eurResponseJSON = await clientNBP.getActualEURRateAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
-            string usdResponseJSON = await clientNBP.GetCurrencyAsync("USD");
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/USD/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual USD rate...");
+            string usdResponseJSON = await clientNBP.getActualUSDRateAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
-            string gbpResponseJSON = await clientNBP.GetCurrencyAsync("GBP");
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/GBP/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual GBP rate...");
+            string gbpResponseJSON = await clientNBP.getActualGBPRateAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
-            string goldResponseJSON = await clientNBP.GetGoldPrizeAsync();
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/cenyzlota/?format=json");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual Gold rate...");
+            string goldResponseJSON = await clientNBP.getActualGoldPrizeAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
             // Map JSON  to POCO
@@ -60,18 +67,18 @@ namespace CurrencyRates
             GoldModel[] gold = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON);
 
             // Extract currency rates
-            DateTime date = eur.rates[0].effectiveDate;
-            double eurRate = eur.rates[0].mid;
-            double usdRate = usd.rates[0].mid;
-            double gbpRate = gbp.rates[0].mid;
-            double goldRate = gold[0].cena;
+            dataDate = eur.rates[0].effectiveDate;
+            EURRate = eur.rates[0].mid;
+            USDRate = usd.rates[0].mid;
+            GBPRate = gbp.rates[0].mid;
+            GoldRate = gold[0].cena;
 
             // Update UI 
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + date.ToString("yyyy-MM-dd") + " from WEB API";
-            textBlock_EUR_RateFromWebAPI.Text = eurRate.ToString() + " PLN";
-            textBlock_USD_RateFromWebAPI.Text = usdRate.ToString() + " PLN";
-            textBlock_GBP_RateFromWebAPI.Text = gbpRate.ToString() + " PLN";
-            textBlock_Gold_RateFromWebAPI.Text = goldRate.ToString() + " PLN / Gram";
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + dataDate.ToString("yyyy-MM-dd") + " from WEB API";
+            textBlock_EUR_RateFromWebAPI.Text = EURRate.ToString() + " PLN";
+            textBlock_USD_RateFromWebAPI.Text = USDRate.ToString() + " PLN";
+            textBlock_GBP_RateFromWebAPI.Text = GBPRate.ToString() + " PLN";
+            textBlock_Gold_RateFromWebAPI.Text = GoldRate.ToString() + " PLN / Gram";
 
         }
         #endregion
