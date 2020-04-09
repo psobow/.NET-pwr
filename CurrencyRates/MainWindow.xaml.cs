@@ -104,7 +104,7 @@ namespace CurrencyRates
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for Gold rate from " + inputDate + "...\n");
-            string goldResponseJSON = await clientNBP.getCurrentGoldPrizeAsync();
+            string goldResponseJSON = await clientNBP.getGoldFromSpecificDateAsync(inputDate);
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
             // Map JSON to POCO if JSON's presents
