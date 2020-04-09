@@ -43,19 +43,19 @@ namespace CurrencyRates
         private async void get_actual_exchange_rates_Click(object sender, RoutedEventArgs e)
         {
             // Send HTTP requests
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual EURO rate...");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual EURO rate...\n");
             string eurResponseJSON = await clientNBP.getCurrentEURAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual USD rate...");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual USD rate...\n");
             string usdResponseJSON = await clientNBP.getCurrentUSDAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual GBP rate...");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual GBP rate...\n");
             string gbpResponseJSON = await clientNBP.getCurrentGBPAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual Gold rate...");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual Gold rate...\n");
             string goldResponseJSON = await clientNBP.getCurrentGoldPrizeAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
@@ -82,6 +82,15 @@ namespace CurrencyRates
             textBlock_Gold_RateFromWebAPI.Text = GoldRate.ToString() + " PLN / Gram";
 
         }
+
+        private void button_getExchangesRatesFromSpecificDate_Click(object sender, RoutedEventArgs e)
+        {
+            string inputData = textBox_insertDate_1.Text;
+
+            bool isInputDataValid = true; // TODO: implement input validator
+
+        }
+
         #endregion
 
         #region auxiliary app functionalities implementation
@@ -91,7 +100,13 @@ namespace CurrencyRates
         {
             resetUI();
             Loger.appBeginTextWithTime(textBox_AppLoger, "App UI has been reset");
-        }
+
+            // Reset objects references
+            currentEUR = null;
+            currentUSD = null;
+            currentGBP = null;
+            currentGold = null;
+    }
 
 
         private void resetUI()

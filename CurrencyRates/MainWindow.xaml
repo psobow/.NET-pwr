@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CurrencyRates"
         mc:Ignorable="d"
-        Title="Currency Rates" Height="720" Width="600">
+        Title="Currency Rates" Height="820" Width="600">
 
     <Border Padding="10">
         <StackPanel>
@@ -52,11 +52,12 @@
 
                 <!-- Middle row -->
                 <Button
+                    Name="button_getExchangesRatesFromSpecificDate"
                     Grid.Column="0"
                     Grid.Row="1"
                     Height="auto"
-                    Margin="0 0 0 0"
-                    Name="get_exchange_rates_from_specific_date" >
+                    Margin="0 0 0 0" Click="button_getExchangesRatesFromSpecificDate_Click"
+                     >
                     <TextBlock 
                         Height="auto"
                         Text="Get exchange rates from specific date" 
@@ -464,7 +465,7 @@
                 <TextBlock Text="APP LOGS" Margin="0 0 0 5" FontWeight="Bold"/>
                 <ScrollViewer 
                     HorizontalScrollBarVisibility="Disabled"
-                    Height="100"
+                    Height="200"
                     CanContentScroll="True">
                     <TextBox 
                         Name="textBox_AppLoger" 
