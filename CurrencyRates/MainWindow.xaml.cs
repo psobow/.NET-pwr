@@ -128,6 +128,14 @@ namespace CurrencyRates
                 textBlock_GBP_RateFromWebAPI.Text = (GBPRate.HasValue ? GBPRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
                 textBlock_Gold_RateFromWebAPI.Text = (GoldRate.HasValue ? GoldRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN / Gram";
             }
+            else if (!isInputDateFormatValid)
+            {
+                MessageBox.Show("Invalid date format. Please insert date in given format: " + InputValidator.DATE_FORMAT, "WEB API INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show("Invalid date. Please insert valid date!", "WEB API INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion
