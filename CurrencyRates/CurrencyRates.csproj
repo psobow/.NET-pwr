@@ -69,6 +69,7 @@
     <Compile Include="ClientNBP.cs" />
     <Compile Include="CurrencyModel.cs" />
     <Compile Include="GoldModel.cs" />
+    <Compile Include="InputValidator.cs" />
     <Compile Include="Loger.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -41,10 +41,10 @@
                     Grid.Row="0"
                     Height="auto"
                     Margin="0 0 0 10" 
-                    Name="get_actual_exchange_rates" Click="get_actual_exchange_rates_Click" >
+                    Name="get_actual_exchange_rates" Click="button_getCurrentExchangeRates_Click" >
                     <TextBlock 
                         Height="auto"
-                        Text="Get actual exchange rates" 
+                        Text="Get current exchange rates" 
                         TextWrapping="Wrap" 
                         TextAlignment="Center"
                     />
@@ -364,7 +364,7 @@
                     Name="display_chart" >
                         <TextBlock 
                         Height="auto"
-                        Text="Display chart" 
+                        Text="Display charts" 
                         TextWrapping="Wrap" 
                         TextAlignment="Center"
                     />

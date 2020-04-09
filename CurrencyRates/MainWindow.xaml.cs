@@ -21,8 +21,7 @@ namespace CurrencyRates
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string DATE_FORMAT = "yyyy-MM-dd";
-        private const string CURRENCY_RATE_FORMAT = "-.----";
+        private readonly string CURRENCY_RATE_FORMAT = "-.----";
         private ClientNBP clientNBP = ClientNBP.Instance;
 
         // current currency rates from web API references
@@ -40,22 +39,22 @@ namespace CurrencyRates
 
 
         #region web API interface implementation
-        private async void get_actual_exchange_rates_Click(object sender, RoutedEventArgs e)
+        private async void button_getCurrentExchangeRates_Click(object sender, RoutedEventArgs e)
         {
             // Send HTTP requests
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual EURO rate...\n");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for current EUR rate...\n");
             string eurResponseJSON = await clientNBP.getCurrentEURAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual USD rate...\n");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for current USD rate...\n");
             string usdResponseJSON = await clientNBP.getCurrentUSDAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual GBP rate...\n");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for current GBP rate...\n");
             string gbpResponseJSON = await clientNBP.getCurrentGBPAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for actual Gold rate...\n");
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for current Gold rate...\n");
             string goldResponseJSON = await clientNBP.getCurrentGoldPrizeAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
@@ -75,7 +74,7 @@ namespace CurrencyRates
             double GoldRate = GoldFromWebAPI.cena;
 
             // Update UI 
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + currentCurrencyRatesDate.ToString(DATE_FORMAT) + " from WEB API";
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + currentCurrencyRatesDate.ToString(InputValidator.DATE_FORMAT) + " from WEB API";
             textBlock_EUR_RateFromWebAPI.Text = EURRate.ToString() + " PLN";
             textBlock_USD_RateFromWebAPI.Text = USDRate.ToString() + " PLN";
             textBlock_GBP_RateFromWebAPI.Text = GBPRate.ToString() + " PLN";
@@ -87,44 +86,49 @@ namespace CurrencyRates
         {
             string inputDate = textBox_insertDate_1.Text;
 
-            bool isInputDataValid = true; // TODO: implement input validator
+            bool isInputDateFormatValid = InputValidator.validateDateFormat(inputDate);
+            bool isInputDateValid = InputValidator.validateDate(inputDate);
 
+            bool isValid = isInputDateFormatValid && isInputDateValid; 
 
-            // Send HTTP requests
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for EURO rate from " + inputDate + "...\n");
-            string eurResponseJSON = await clientNBP.getEURFromSpecificDateAsync(inputDate);
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
+            if (isValid)
+            {
+                // Send HTTP requests
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for EUR rate from " + inputDate + "...\n");
+                string eurResponseJSON = await clientNBP.getEURFromSpecificDateAsync(inputDate);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for USD rate from " + inputDate + "...\n");
-            string usdResponseJSON = await clientNBP.getUSDFromSpecificDateAsync(inputDate);
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for USD rate from " + inputDate + "...\n");
+                string usdResponseJSON = await clientNBP.getUSDFromSpecificDateAsync(inputDate);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for GBP rate from " + inputDate + "...\n");
-            string gbpResponseJSON = await clientNBP.getGBPFromSpecificDateAsync(inputDate);
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for GBP rate from " + inputDate + "...\n");
+                string gbpResponseJSON = await clientNBP.getGBPFromSpecificDateAsync(inputDate);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for Gold rate from " + inputDate + "...\n");
-            string goldResponseJSON = await clientNBP.getGoldFromSpecificDateAsync(inputDate);
-            Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for Gold rate from " + inputDate + "...\n");
+                string goldResponseJSON = await clientNBP.getGoldFromSpecificDateAsync(inputDate);
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
-            // Map JSON to POCO if JSON's presents
-            EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
-            USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
-            GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
-            GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0] : null;
+                // Map JSON to POCO if JSON's presents
+                EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
+                USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
+                GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
+                GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON)[0] : null;
 
-            // Extract currency rates if objects presents
-            double? EURRate = EURFromWebAPI?.rates[0].mid;
-            double? USDRate = USDFromWebAPI?.rates[0].mid;
-            double? GBPRate = GBPFromWebAPI?.rates[0].mid;
-            double? GoldRate = GoldFromWebAPI?.cena;
+                // Extract currency rates if objects presents
+                double? EURRate = EURFromWebAPI?.rates[0].mid;
+                double? USDRate = USDFromWebAPI?.rates[0].mid;
+                double? GBPRate = GBPFromWebAPI?.rates[0].mid;
+                double? GoldRate = GoldFromWebAPI?.cena;
 
-            // Update UI 
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + inputDate + " from WEB API";
-            textBlock_EUR_RateFromWebAPI.Text = (EURRate.HasValue ?  EURRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
-            textBlock_USD_RateFromWebAPI.Text = (USDRate.HasValue ? USDRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
-            textBlock_GBP_RateFromWebAPI.Text = (GBPRate.HasValue ? GBPRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
-            textBlock_Gold_RateFromWebAPI.Text = (GoldRate.HasValue ? GoldRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN / Gram";
+                // Update UI 
+                textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + inputDate + " from WEB API";
+                textBlock_EUR_RateFromWebAPI.Text = (EURRate.HasValue ? EURRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+                textBlock_USD_RateFromWebAPI.Text = (USDRate.HasValue ? USDRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+                textBlock_GBP_RateFromWebAPI.Text = (GBPRate.HasValue ? GBPRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+                textBlock_Gold_RateFromWebAPI.Text = (GoldRate.HasValue ? GoldRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN / Gram";
+            }
         }
 
         #endregion
@@ -154,9 +158,9 @@ namespace CurrencyRates
             resetTextBoxInsertDate(textBox_insertDate_4);
 
             // Reset labeles
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + DATE_FORMAT + " from WEB API";
-            textBlock_LogerForDatabaseData.Text = "Concurency rates from " + DATE_FORMAT + " to " + DATE_FORMAT;
-            textBlock_DateOfDataFromDatabase.Text = "Concurency rates in " + DATE_FORMAT + " from DB";
+            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates in " + InputValidator.DATE_FORMAT + " from WEB API";
+            textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
+            textBlock_DateOfDataFromDatabase.Text = "Concurency rates in " + InputValidator.DATE_FORMAT + " from DB";
 
             // Reset currency rates from web API
             textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
@@ -190,14 +194,14 @@ namespace CurrencyRates
 
         private void resetTextBoxInsertDate(TextBox textBox)
         {
-            textBox.Text = DATE_FORMAT;
+            textBox.Text = InputValidator.DATE_FORMAT;
             textBox.Foreground = Brushes.Gray;
         }
 
         // First text box
         private void textBox_insertDate_1_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (textBox_insertDate_1.Text == DATE_FORMAT)
+            if (textBox_insertDate_1.Text == InputValidator.DATE_FORMAT)
             {
                 textBox_insertDate_1.Text = "";
                 textBox_insertDate_1.Foreground = Brushes.Black;
@@ -215,7 +219,7 @@ namespace CurrencyRates
         // Second text box
         private void textBox_insertDate_2_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (textBox_insertDate_2.Text == DATE_FORMAT)
+            if (textBox_insertDate_2.Text == InputValidator.DATE_FORMAT)
             {
                 textBox_insertDate_2.Text = "";
                 textBox_insertDate_2.Foreground = Brushes.Black;
@@ -233,7 +237,7 @@ namespace CurrencyRates
         // Third text box
         private void textBox_insertDate_3_GotFocus(object sender, RoutedEventArgs e)
         {
-            if(textBox_insertDate_3.Text == DATE_FORMAT)
+            if(textBox_insertDate_3.Text == InputValidator.DATE_FORMAT)
             {
                 textBox_insertDate_3.Text = "";
                 textBox_insertDate_3.Foreground = Brushes.Black;
@@ -251,7 +255,7 @@ namespace CurrencyRates
         // Fourth text box
         private void textBox_insertDate_4_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (textBox_insertDate_4.Text == DATE_FORMAT)
+            if (textBox_insertDate_4.Text == InputValidator.DATE_FORMAT)
             {
                 textBox_insertDate_4.Text = "";
                 textBox_insertDate_4.Foreground = Brushes.Black;
