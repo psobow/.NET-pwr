@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,7 @@ namespace CurrencyRates
         #region web API interface implementation
         private async void get_actual_exchange_rates_Click(object sender, RoutedEventArgs e)
         {
+            // Send HTTP requests
             string eurResponseJSON = await clientNBP.GetAsync("EUR");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/EUR/?format=json");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + eurResponseJSON);
@@ -47,6 +49,10 @@ namespace CurrencyRates
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request to: http://api.nbp.pl/api/exchangerates/rates/a/GBP/?format=json");
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
+            // Map JSON  to POCO
+            CurrencyModel eur = JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON);
+            CurrencyModel usd = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
+            CurrencyModel gbp = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
 
         }
         #endregion
