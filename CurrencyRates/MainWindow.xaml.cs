@@ -88,7 +88,7 @@ namespace CurrencyRates
             textBlock_Gold_RateFromWebAPI_Date.Text = GoldDate.ToString(InputValidator.DATE_FORMAT);
 
             // Clear database loger
-            textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
+            textBlock_LogerForDatabaseData.Text = "Currency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
             textBox_DatabaseLoger.Text = "";
         }
 
@@ -145,7 +145,7 @@ namespace CurrencyRates
                 textBlock_Gold_RateFromWebAPI_Date.Text = inputDate;
 
                 // Clear database loger
-                textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
+                textBlock_LogerForDatabaseData.Text = "Currency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
                 textBox_DatabaseLoger.Text = "";
             }
             else if (!isInputDateFormatValid)
@@ -214,7 +214,7 @@ namespace CurrencyRates
 
 
                 // Update UI
-                textBlock_LogerForDatabaseData.Text = "Concurency rates from " + inputStartDate + " to " + inputEndDate;
+                textBlock_LogerForDatabaseData.Text = "Currency rates from " + inputStartDate + " to " + inputEndDate;
                 // Reset currency rates from web API
                 textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
                 textBlock_GBP_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";
@@ -270,9 +270,9 @@ namespace CurrencyRates
             resetTextBoxInsertDate(textBox_insertDate_4);
 
             // Reset labeles
-            textBlock_DateOfDataFromWebAPI.Text = "Concurency rates from WEB API";
-            textBlock_LogerForDatabaseData.Text = "Concurency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
-            textBlock_DateOfDataFromDatabase.Text = "Concurency rates from DB";
+            textBlock_DateOfDataFromWebAPI.Text = "Currency rates from WEB API";
+            textBlock_LogerForDatabaseData.Text = "Currency rates from " + InputValidator.DATE_FORMAT + " to " + InputValidator.DATE_FORMAT;
+            textBlock_DateOfDataFromDatabase.Text = "Currency rates from DB";
 
             // Reset currency rates from web API
             textBlock_EUR_RateFromWebAPI.Text = CURRENCY_RATE_FORMAT + " PLN";

@@ -150,7 +150,7 @@
 
             </Grid>
 
-            <!-- Concurency Rates From WEB API-->
+            <!-- Currency Rates From WEB API-->
             <Grid Margin="0 10 0 10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
@@ -167,7 +167,7 @@
                     >
                     <TextBlock 
                         Name="textBlock_DateOfDataFromWebAPI"
-                        Text="Concurency rates from WEB API" 
+                        Text="Currency rates from WEB API" 
                         FontWeight="Bold" 
                         TextWrapping="Wrap"
                     />
@@ -283,7 +283,7 @@
                     >
                     <TextBlock 
                         Name="textBlock_LogerForDatabaseData"
-                        Text="Concurency rates from yyyy-MM-dd to yyyy-MM-dd" 
+                        Text="Currency rates from yyyy-MM-dd to yyyy-MM-dd" 
                         FontWeight="Bold" 
                         TextWrapping="Wrap"
                     />
@@ -411,7 +411,7 @@
                     Margin="10 0 0 0">
                     <TextBlock 
                         Name="textBlock_DateOfDataFromDatabase"
-                        Text="Concurency rates from DB" 
+                        Text="Currency rates from DB" 
                         FontWeight="Bold" 
                         TextWrapping="Wrap"
                     />
