@@ -12,6 +12,7 @@ namespace CurrencyRates
     {
         private readonly string NBP_API_BASE_URL = "http://api.nbp.pl/api";
         private readonly string RESPONSE_FORMAT = "?format=json";
+        public readonly string resourceNotFoundString = "Resource not found - 404";
 
         // Singleton
         private ClientNBP()
@@ -42,7 +43,7 @@ namespace CurrencyRates
             }
             catch (WebException ex)
             {
-                return "";
+                return resourceNotFoundString;
             }
         }
 

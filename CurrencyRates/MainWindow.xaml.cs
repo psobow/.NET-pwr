@@ -122,16 +122,16 @@ namespace CurrencyRates
                 Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
                 // Map JSON to POCO if JSON's presents
-                EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
-                USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
-                GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
-                GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
+                EURFromWebAPI = eurResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
+                USDFromWebAPI = usdResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
+                GBPFromWebAPI = gbpResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
+                GoldFromWebAPI = goldResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
 
                 // Extract currency rates if objects presents
                 double? EURRate = EURFromWebAPI?.rates[0].mid;
                 double? USDRate = USDFromWebAPI?.rates[0].mid;
                 double? GBPRate = GBPFromWebAPI?.rates[0].mid;
-                double? GoldRate = GoldFromWebAPI[0]?.cena;
+                double? GoldRate = GoldFromWebAPI?[0].cena;
 
                 // Update UI 
                 textBlock_EUR_RateFromWebAPI.Text = (EURRate.HasValue ? EURRate.Value.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
@@ -191,26 +191,43 @@ namespace CurrencyRates
                 //Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + goldResponseJSON);
 
                 // Map JSON to POCO if JSON's presents
-                EURFromWebAPI = eurResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
-                USDFromWebAPI = usdResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
-                GBPFromWebAPI = gbpResponseJSON != "" ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
-                GoldFromWebAPI = goldResponseJSON != "" ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
+                EURFromWebAPI = eurResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<CurrencyModel>(eurResponseJSON) : null;
+                USDFromWebAPI = usdResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON) : null;
+                GBPFromWebAPI = gbpResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON) : null;
+                GoldFromWebAPI = goldResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
 
                 // Print output
-                Loger.appBeginTextWithTime(textBox_AppLoger, "Printing output in database loger...");
+                textBox_DatabaseLoger.Text = ""; // Clear db log
+                string output = "";
+                int quantityOfDaysBetween = (DateTime.Parse(inputEndDate).Date - DateTime.Parse(inputStartDate).Date).Days;
+                if (quantityOfDaysBetween >= 367)
+                {
+                    output += "400 BadRequest - Przekroczony limit 367 dni / Limit of 367 days has been exceeded\n";
+                }
 
-                string output = "Currency rates from " + inputStartDate + " to " + inputEndDate + "\n";
 
-                EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
-                output += "\n";
-                USDFromWebAPI.rates.ToList().ForEach(x => output = output + "USD: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
-                output += "\n";
-                GBPFromWebAPI.rates.ToList().ForEach(x => output = output + "GBP: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
-                output += "\n";
-                GoldFromWebAPI.ToList().ForEach(x => output = output + "Gold: " + x.cena + "   " + x.data.ToString(InputValidator.DATE_FORMAT) + "\n");
-                //EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                if (EURFromWebAPI != null && USDFromWebAPI != null && GBPFromWebAPI != null && GoldFromWebAPI != null)
+                {
+                    Loger.appBeginTextWithTime(textBox_AppLoger, "Printing output in database loger...");
 
-                Loger.appBeginTextWithTime(textBox_DatabaseLoger, output);
+                    output += "Currency rates from " + inputStartDate + " to " + inputEndDate + "\n";
+
+                    EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    output += "\n";
+                    USDFromWebAPI.rates.ToList().ForEach(x => output = output + "USD: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    output += "\n";
+                    GBPFromWebAPI.rates.ToList().ForEach(x => output = output + "GBP: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    output += "\n";
+                    GoldFromWebAPI.ToList().ForEach(x => output = output + "Gold: " + x.cena + "   " + x.data.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    //EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+
+                    Loger.appBeginTextWithTime(textBox_DatabaseLoger, output);
+                }
+                else
+                {
+                    output += clientNBP.resourceNotFoundString;
+                    Loger.appBeginTextWithTime(textBox_DatabaseLoger, output);
+                }
 
 
                 // Update UI
