@@ -219,7 +219,6 @@ namespace CurrencyRates
                     GBPFromWebAPI.rates.ToList().ForEach(x => output = output + "GBP: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
                     output += "\n";
                     GoldFromWebAPI.ToList().ForEach(x => output = output + "Gold: " + x.cena + "   " + x.data.ToString(InputValidator.DATE_FORMAT) + "\n");
-                    //EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
 
                     Loger.appBeginTextWithTime(textBox_DatabaseLoger, output);
                 }

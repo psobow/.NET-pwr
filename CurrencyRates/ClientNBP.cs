@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace CurrencyRates
 {
+    // TODO:
+    // Zaimplementować klase DTO, która będzie zwracana przez sendGetAsync z polami
+    // string response 
+    // responseHttpStatusCode statusCode
     public sealed class ClientNBP
     {
         private readonly string NBP_API_BASE_URL = "http://api.nbp.pl/api";
