@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -303,8 +304,13 @@ namespace CurrencyRates
                     updateCurrency(gbp, GBPFromWebAPI);
                 }
 
-               // dbContext.goldModels.AddRange(GoldFromWebAPI);
 
+                foreach (GoldModel gold in GoldFromWebAPI)
+                {
+                    dbContext.goldModels.AddOrUpdate(gold);
+                }
+
+               
                 dbContext.SaveChanges();
 
             }
