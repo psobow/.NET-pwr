@@ -22,7 +22,9 @@ namespace CurrencyRates
     public partial class MainWindow : Window
     {
         private readonly string CURRENCY_RATE_FORMAT = "-.----";
+
         private ClientNBP clientNBP = ClientNBP.Instance;
+        private CurrencyDbContext dbContext = new CurrencyDbContext();
 
         // current currency rates from web API references
         private CurrencyModel EURFromWebAPI;
@@ -65,15 +67,15 @@ namespace CurrencyRates
             GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON);
 
             // Extract current currencies date
-            DateTime EURDate = EURFromWebAPI.rates[0].effectiveDate;
-            DateTime USDDate = USDFromWebAPI.rates[0].effectiveDate;
-            DateTime GBPDate = GBPFromWebAPI.rates[0].effectiveDate;
+            DateTime EURDate = EURFromWebAPI.Rates[0].effectiveDate;
+            DateTime USDDate = USDFromWebAPI.Rates[0].effectiveDate;
+            DateTime GBPDate = GBPFromWebAPI.Rates[0].effectiveDate;
             DateTime GoldDate = GoldFromWebAPI[0].data;
 
             // Extract currency rates
-            double EURRate = EURFromWebAPI.rates[0].mid;
-            double USDRate = USDFromWebAPI.rates[0].mid;
-            double GBPRate = GBPFromWebAPI.rates[0].mid;
+            double EURRate = EURFromWebAPI.Rates[0].mid;
+            double USDRate = USDFromWebAPI.Rates[0].mid;
+            double GBPRate = GBPFromWebAPI.Rates[0].mid;
             double GoldRate = GoldFromWebAPI[0].cena;
 
             // Update UI 
@@ -128,9 +130,9 @@ namespace CurrencyRates
                 GoldFromWebAPI = goldResponseJSON != clientNBP.resourceNotFoundString ? JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON) : null;
 
                 // Extract currency rates if objects presents
-                double? EURRate = EURFromWebAPI?.rates[0].mid;
-                double? USDRate = USDFromWebAPI?.rates[0].mid;
-                double? GBPRate = GBPFromWebAPI?.rates[0].mid;
+                double? EURRate = EURFromWebAPI?.Rates[0].mid;
+                double? USDRate = USDFromWebAPI?.Rates[0].mid;
+                double? GBPRate = GBPFromWebAPI?.Rates[0].mid;
                 double? GoldRate = GoldFromWebAPI?[0].cena;
 
                 // Update UI 
@@ -212,11 +214,11 @@ namespace CurrencyRates
 
                     output += "Currency rates from " + inputStartDate + " to " + inputEndDate + "\n";
 
-                    EURFromWebAPI.rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    EURFromWebAPI.Rates.ToList().ForEach(x => output = output + "EUR: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
                     output += "\n";
-                    USDFromWebAPI.rates.ToList().ForEach(x => output = output + "USD: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    USDFromWebAPI.Rates.ToList().ForEach(x => output = output + "USD: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
                     output += "\n";
-                    GBPFromWebAPI.rates.ToList().ForEach(x => output = output + "GBP: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
+                    GBPFromWebAPI.Rates.ToList().ForEach(x => output = output + "GBP: " + x.mid + "   " + x.effectiveDate.ToString(InputValidator.DATE_FORMAT) + "\n");
                     output += "\n";
                     GoldFromWebAPI.ToList().ForEach(x => output = output + "Gold: " + x.cena + "   " + x.data.ToString(InputValidator.DATE_FORMAT) + "\n");
 
@@ -259,6 +261,100 @@ namespace CurrencyRates
             }
         }
 
+        #endregion
+
+        #region data base functionality
+
+        private void save_in_database_Click(object sender, RoutedEventArgs e)
+        {
+            if (isDataInitialized())
+            {
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Adding data to database...");
+
+                // Find EURO entity
+                var eur = dbContext.findCurrencyByCode("EUR");
+                if (eur == null) // If there is no EUR in database add new one
+                {
+                    dbContext.currencyModels.Add(EURFromWebAPI);
+                }
+                else // If there is EUR in database modify that one
+                {
+                    updateCurrency(eur, EURFromWebAPI);
+                }
+
+                // Find USD entity
+                var usd = dbContext.findCurrencyByCode("USD");
+                if (usd == null)
+                {
+                    dbContext.currencyModels.Add(USDFromWebAPI);
+                }
+                else // If there is USD in database modify that one
+                {
+                    updateCurrency(usd, USDFromWebAPI);
+                }
+
+                var gbp = dbContext.findCurrencyByCode("GBP");
+                if (gbp == null)
+                {
+                    dbContext.currencyModels.Add(GBPFromWebAPI);
+                }
+                else // If there is GBP in database modify that one
+                {
+                    updateCurrency(gbp, GBPFromWebAPI);
+                }
+
+               // dbContext.goldModels.AddRange(GoldFromWebAPI);
+
+                dbContext.SaveChanges();
+
+            }
+            else
+            {
+                MessageBox.Show("First fetch data from WEB API!", "DATABASE INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private bool isDataInitialized()
+        {
+            return EURFromWebAPI != null && USDFromWebAPI != null && GBPFromWebAPI != null && GoldFromWebAPI != null;
+        }
+
+        private void updateCurrency(CurrencyModel currencyFromDatabase, CurrencyModel currencyFromWebAPI)
+        {
+            List<Rate> newRates = new List<Rate>();
+            foreach (Rate rate in currencyFromWebAPI.Rates)
+            {
+                Rate newRate = new Rate();
+                newRate.no = rate.no;
+                newRate.effectiveDate = rate.effectiveDate;
+                newRate.mid = rate.mid;
+
+                newRates.Add(newRate);
+            }
+
+
+            // Find rates in database
+            var ratesFromDB = dbContext.rates
+                .Where(rate => rate.CurrencyModel.code == currencyFromDatabase.code)
+                .ToList();
+
+            // set up one to many relation
+            foreach (var rate in newRates)
+            {
+                rate.CurrencyModel = currencyFromDatabase;
+            }
+            currencyFromDatabase.Rates = new List<Rate>();
+            currencyFromDatabase.Rates.AddRange(ratesFromDB);
+            currencyFromDatabase.Rates.AddRange(newRates);
+
+            // Filter duplicates for one currency by date
+            currencyFromDatabase.Rates = currencyFromDatabase.Rates
+                .GroupBy(elem => elem.effectiveDate)
+                .Select(group => group.First())
+                .ToList();
+        }
+
+        
         #endregion
 
         #region auxiliary app functionalities implementation
@@ -322,9 +418,45 @@ namespace CurrencyRates
         }
 
         // DELETE ALL DATA IN DATABASE
+
+        private void button_deleteAllDataInDB_Click(object sender, RoutedEventArgs e)
+        {
+            Loger.appBeginTextWithTime(textBox_AppLoger, "Deleting all data in database...");
+            deleteAllDataInDatabase();
+        }
+
         private void deleteAllDataInDatabase()
         {
+            // Drop the database if it exists and create new one
+            //dbContext.Database.Delete();
+            //dbContext.Database.Create();
 
+            List<Rate> newEURRates = new List<Rate>();
+            List<Rate> newUSDRates = new List<Rate>();
+            List<Rate> newGBPRates = new List<Rate>();
+
+            // Musze utworzyć kopie tablicy z kursami dla każdej waluty ponieważ wywołanie dbContext.currencyModels.RemoveRange(dbContext.currencyModels);
+            // spowoduje usunięcie danych w lokalnej referencji do kursów walut w programie.
+            if (EURFromWebAPI != null && USDFromWebAPI != null && GBPFromWebAPI != null)
+            {
+                newEURRates.AddRange(EURFromWebAPI.Rates);
+                newUSDRates.AddRange(USDFromWebAPI.Rates);
+                newGBPRates.AddRange(GBPFromWebAPI.Rates);
+            }
+
+            dbContext.currencyModels.RemoveRange(dbContext.currencyModels);
+            dbContext.rates.RemoveRange(dbContext.rates);
+            dbContext.goldModels.RemoveRange(dbContext.goldModels);
+
+            dbContext.SaveChanges();
+
+            // Odtworzenie danych w programie które zostały skasowane przez dbContext.currencyModels.RemoveRange(dbContext.currencyModels);
+            if (EURFromWebAPI != null && USDFromWebAPI != null && GBPFromWebAPI != null)
+            {
+                EURFromWebAPI.Rates.AddRange(newEURRates);
+                USDFromWebAPI.Rates.AddRange(newUSDRates);
+                GBPFromWebAPI.Rates.AddRange(newGBPRates);
+            }
         }
 
         #endregion 
@@ -409,6 +541,7 @@ namespace CurrencyRates
                 resetTextBoxInsertDate(textBox_insertDate_4);
             }
         }
+
         #endregion
 
     }

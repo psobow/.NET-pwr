@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CurrencyRates
+{
+    public sealed class CurrencyDbContext : DbContext
+    {
+        public DbSet<Rate> rates { get; set; }
+        public DbSet<CurrencyModel> currencyModels { get; set; }
+        public DbSet<GoldModel> goldModels { get; set; }
+
+        public CurrencyModel findCurrencyByCode(string code)
+        {
+            return this.currencyModels
+                    .Where(currency => currency.code == code)
+                    .FirstOrDefault<CurrencyModel>();
+        }
+        
+        /*
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            modelBuilder.Entity<Rate>()
+                    .HasRequired(s => s.CurrencyModel)
+                    .WithMany()
+                    .WillCascadeOnDelete(true);
+
+            base.OnModelCreating(modelBuilder);
+        }
+        */
+    }
+    
+}

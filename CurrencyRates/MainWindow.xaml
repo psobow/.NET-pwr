@@ -343,7 +343,7 @@
                     Grid.Row="0"
                     Height="auto"
                     Margin="0 5 0 5" 
-                    Name="save_in_database" >
+                    Name="save_in_database" Click="save_in_database_Click" >
                         <TextBlock 
                         Height="auto"
                         Text="Save exchange rates in DB" 
@@ -560,9 +560,10 @@
                     </Button>
 
                     <Button
+                        Name="button_deleteAllDataInDB"
                         Height="Auto"
                         Content="Delete all data in DB"
-                        Margin="0 5 0 5">
+                        Margin="0 5 0 5" Click="button_deleteAllDataInDB_Click">
                     </Button>
                 </StackPanel>
             </Grid>
