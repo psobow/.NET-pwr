@@ -371,6 +371,7 @@ namespace CurrencyRates
 
         private void updateCurrency(CurrencyModel currencyFromDatabase, CurrencyModel currencyFromWebAPI)
         {
+            // Create deep copy of rates from web API
             List<Rate> newRates = new List<Rate>();
             foreach (Rate rate in currencyFromWebAPI.Rates)
             {
@@ -394,10 +395,10 @@ namespace CurrencyRates
                 rate.CurrencyModel = currencyFromDatabase;
             }
             currencyFromDatabase.Rates = new List<Rate>();
-            currencyFromDatabase.Rates.AddRange(ratesFromDB);
             currencyFromDatabase.Rates.AddRange(newRates);
+            currencyFromDatabase.Rates.AddRange(ratesFromDB);
 
-            // Filter duplicates for one currency by date
+            // Filter rate duplicates for one currency by date
             currencyFromDatabase.Rates = currencyFromDatabase.Rates
                 .GroupBy(elem => elem.effectiveDate)
                 .Select(group => group.First())
@@ -494,8 +495,8 @@ namespace CurrencyRates
                 newGBPRates.AddRange(GBPFromWebAPI.Rates);
             }
 
-            dbContext.currencyModels.RemoveRange(dbContext.currencyModels);
             dbContext.rates.RemoveRange(dbContext.rates);
+            dbContext.currencyModels.RemoveRange(dbContext.currencyModels);
             dbContext.goldModels.RemoveRange(dbContext.goldModels);
 
             dbContext.SaveChanges();
