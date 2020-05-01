@@ -20,7 +20,24 @@ namespace CurrencyRates
                     .Where(currency => currency.code == code)
                     .FirstOrDefault<CurrencyModel>();
         }
-        
+
+        public Rate findCurrencyRateByCodeAndDate(string code, DateTime dateTime)
+        {
+            var currency = findCurrencyByCode(code);
+
+            if (currency != null)
+            {
+                return this.rates
+                    .Where(rate => rate.effectiveDate.Equals(dateTime) && rate.CurrencyModel.CurrencyModelId == currency.CurrencyModelId)
+                    .FirstOrDefault<Rate>();
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+
         /*
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

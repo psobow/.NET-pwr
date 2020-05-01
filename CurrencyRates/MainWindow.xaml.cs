@@ -320,6 +320,50 @@ namespace CurrencyRates
             }
         }
 
+        private void get_exchange_rates_from_database_in_specific_date_Click(object sender, RoutedEventArgs e)
+        {
+            // Read input
+            string input = textBox_insertDate_4.Text;
+
+            // Validate input
+            bool isInputDateFormatValid = InputValidator.validateDateFormat(input);
+            bool isInputDateValid = InputValidator.validateDate(input);
+            bool isValid = isInputDateFormatValid && isInputDateValid;
+
+            if (isValid)
+            {
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Fetching data from database from date: " + input);
+                DateTime inputDateTime = DateTime.Parse(input);
+                // Fetch data from DB
+                var eurRate = dbContext.findCurrencyRateByCodeAndDate("EUR", inputDateTime);
+                var usdRate = dbContext.findCurrencyRateByCodeAndDate("USD", inputDateTime);
+                var gbpRate = dbContext.findCurrencyRateByCodeAndDate("GBP", inputDateTime);
+
+                var goldRate = dbContext.goldModels
+                    .Where(element => element.data.Equals(inputDateTime))
+                    .FirstOrDefault<GoldModel>();
+
+                // Update UI
+                textBlock_EUR_RateFromDatabase.Text =  (eurRate != null ? eurRate.mid.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+                textBlock_USD_RateFromDatabase.Text = (usdRate != null ? usdRate.mid.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+                textBlock_GBP_RateFromDatabase.Text =  (gbpRate != null ? gbpRate.mid.ToString() : CURRENCY_RATE_FORMAT) + " PLN";
+                textBlock_Gold_RateFromDatabase.Text =  (goldRate != null ? goldRate.cena.ToString() : CURRENCY_RATE_FORMAT) + " PLN / Gram";
+
+                textBlock_EUR_RateFromDB_Date.Text = input;
+                textBlock_USD_RateFromDB_Date.Text = input;
+                textBlock_GBP_RateFromDB_Date.Text = input;
+                textBlock_Gold_RateFromDB_Date.Text = input;
+            }
+            else if (!isInputDateFormatValid)
+            {
+                MessageBox.Show("Invalid date format. Please insert date in given format: " + InputValidator.DATE_FORMAT, "DATABASE INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show("Invalid date. Please insert valid date!", "DATABASE INTERFACE", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private bool isDataInitialized()
         {
             return EURFromWebAPI != null && USDFromWebAPI != null && GBPFromWebAPI != null && GoldFromWebAPI != null;
@@ -550,5 +594,6 @@ namespace CurrencyRates
 
         #endregion
 
+        
     }
 }

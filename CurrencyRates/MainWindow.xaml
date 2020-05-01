@@ -354,11 +354,11 @@
 
                     <!-- Middle row -->
                     <Button
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Height="auto"
-                    Margin="0 5 0 5" 
-                    Name="get_exchange_rates_from_database_in_specific_date" >
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Height="auto"
+                        Margin="0 5 0 5" 
+                        Name="get_exchange_rates_from_database_in_specific_date" Click="get_exchange_rates_from_database_in_specific_date_Click" >
                         <TextBlock 
                         Height="auto"
                         Text="Get exchange rates from database in specific date" 
