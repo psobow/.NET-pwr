@@ -281,6 +281,7 @@ namespace CurrencyRates
                 else // If there is EUR in database modify that one
                 {
                     updateCurrency(eur, EURFromWebAPI);
+                    //dbContext.currencyModels.AddOrUpdate(EURFromWebAPI);
                 }
 
                 // Find USD entity
@@ -292,6 +293,7 @@ namespace CurrencyRates
                 else // If there is USD in database modify that one
                 {
                     updateCurrency(usd, USDFromWebAPI);
+                    //dbContext.currencyModels.AddOrUpdate(USDFromWebAPI);
                 }
 
                 var gbp = dbContext.findCurrencyByCode("GBP");
@@ -302,6 +304,7 @@ namespace CurrencyRates
                 else // If there is GBP in database modify that one
                 {
                     updateCurrency(gbp, GBPFromWebAPI);
+                    //dbContext.currencyModels.AddOrUpdate(GBPFromWebAPI);
                 }
 
 
@@ -384,25 +387,25 @@ namespace CurrencyRates
             }
 
 
-            // Find rates in database
+            // Find specific currency rates in database
             var ratesFromDB = dbContext.rates
                 .Where(rate => rate.CurrencyModel.code == currencyFromDatabase.code)
                 .ToList();
 
-            // set up one to many relation
-            foreach (var rate in newRates)
+            // Add only unique rates 
+            foreach (Rate rate in newRates)
             {
-                rate.CurrencyModel = currencyFromDatabase;
-            }
-            currencyFromDatabase.Rates = new List<Rate>();
-            currencyFromDatabase.Rates.AddRange(newRates);
-            currencyFromDatabase.Rates.AddRange(ratesFromDB);
+                bool contain = ratesFromDB.Any(element => element.no == rate.no 
+                    && element.effectiveDate.Equals(rate.effectiveDate) 
+                    && element.mid == rate.mid);
 
-            // Filter rate duplicates for one currency by date
-            currencyFromDatabase.Rates = currencyFromDatabase.Rates
-                .GroupBy(elem => elem.effectiveDate)
-                .Select(group => group.First())
-                .ToList();
+                if (contain == false)
+                {
+                    rate.CurrencyModel = currencyFromDatabase;
+                    currencyFromDatabase.Rates.Add(rate);
+                }
+            }
+            
         }
 
         
