@@ -5,7 +5,7 @@ Application allows you to get actual EUR, USD, GBP currency rates and current Go
 - Generate user friendly GUI which allows to perform certain tasks and present data in readable manner. **(accomplished)**
 - Sending GET HTTP requests to [NBP Web API](http://api.nbp.pl/) in order to fetch data about actual and previous EUR, USD, GBP currency rates and also fetching data about gold price. **(accomplished)**
 - Mapping JSON objects into C# objects with [Json.NET](https://www.newtonsoft.com/json) external library. **(accomplished)**
-- Persisting data in the local database, and reading data from local database. **(pending)**
+- Persisting data in the local database, and reading data from local database. **(accomplished)**
 - Displaying a chart presenting exchange rates over time based on data from the database. **(pending)**
 - Reliable set of automated tests which guarantee proper application workflow. **(pending)**
 
