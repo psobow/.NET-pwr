@@ -9,6 +9,9 @@ namespace CurrencyRates
 {
     public class GoldModel
     {
+
+
+
         [Key]
         public int GoldModelId { get; set; }
         public DateTime data { get; set; }
