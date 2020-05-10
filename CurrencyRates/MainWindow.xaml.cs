@@ -57,7 +57,7 @@ namespace CurrencyRates
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + usdResponseJSON);
 
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for current GBP rate...\n");
-            string gbpResponseJSON = await clientNBP.getCurrentGBPAsync();
+            string gbpResponseJSON = await clientNBP.getCurrentGoldAsync();
             Loger.appBeginTextWithTime(textBox_AppLoger, "Response: " + gbpResponseJSON);
 
             Loger.appBeginTextWithTime(textBox_AppLoger, "Sending GET HTTP request for current Gold rate...\n");

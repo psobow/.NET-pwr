@@ -67,7 +67,7 @@ namespace CurrencyRates
             return await sendGetAsync(uri);
         }
 
-        public async Task<string> getCurrentGBPAsync()
+        public async Task<string> getCurrentGoldAsync()
         {
             string uri = NBP_API_BASE_URL + "/exchangerates/rates/a/GBP" + RESPONSE_FORMAT;
             return await sendGetAsync(uri);

@@ -35,11 +35,63 @@ namespace CurrencyRates_testProject
         }
 
         // USD
+         [TestMethod]
+        public async System.Threading.Tasks.Task shouldGetUsdCurrencyAsync()
+        {
+            // Given
 
+            // When
+            string usdResponseJSON = await clientNBP.getCurrentUSDAsync();
+
+            // Then
+            CurrencyModel USDFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
+
+            Assert.IsNotNull(USDFromWebAPI);
+            Assert.IsNotNull(USDFromWebAPI.code);
+            Assert.IsNotNull(USDFromWebAPI.currency);
+            Assert.IsNotNull(USDFromWebAPI.Rates);
+            Assert.IsNotNull(USDFromWebAPI.table);
+
+            Assert.AreEqual(USDFromWebAPI.code, "USD");
+        }
         // GBP
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldGetGbpCurrencyAsync()
+        {
+            // Given
+
+            // When
+            string gbpResponseJSON = await clientNBP.getCurrentGoldAsync();
+
+            // Then
+            CurrencyModel GBPFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
+
+            Assert.IsNotNull(GBPFromWebAPI);
+            Assert.IsNotNull(GBPFromWebAPI.code);
+            Assert.IsNotNull(GBPFromWebAPI.currency);
+            Assert.IsNotNull(GBPFromWebAPI.Rates);
+            Assert.IsNotNull(GBPFromWebAPI.table);
+
+            Assert.AreEqual(GBPFromWebAPI.code, "GBP");
+        }
 
         // GOLD
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldGetGoldCurrencyAsync()
+        {
+            // Given
 
+            // When
+            string goldResponseJSON = await clientNBP.getCurrentGoldAsync();
+
+            // Then
+           GoldModel GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel>(goldResponseJSON);
+
+            Assert.IsNotNull(GoldFromWebAPI);
+            Assert.IsNotNull(GoldFromWebAPI.cena);
+            Assert.IsNotNull(GoldFromWebAPI.data);
+                     
+        }
 
 
         // Period of time
@@ -65,26 +117,61 @@ namespace CurrencyRates_testProject
         }
 
         // USD
-
-        // GBP
-
-        // GOLD
-
-
-        // FAILURE SCCENARIO
-        //EUR
         [TestMethod]
-        public async System.Threading.Tasks.Task shouldReturn404ForEuro()
+        public async System.Threading.Tasks.Task shouldGetUsdCurrencyPeriodOfTimeAsync()
         {
             // Given
 
             // When
-            string eurResponseJSON = await clientNBP.getEURFromPeriodOfTime("2018-03-01", "2020-04-01");
+            string usdResponseJSON = await clientNBP.getUSDFromPeriodOfTime("2020-03-01", "2020-04-01");
 
             // Then
-            Assert.AreEqual(eurResponseJSON, "Resource not found - 404");
-        }
-        // AA test test AAA
+            CurrencyModel USDFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(usdResponseJSON);
 
-    }
+            Assert.IsNotNull(USDFromWebAPI);
+            Assert.IsNotNull(USDFromWebAPI.code);
+            Assert.IsNotNull(USDFromWebAPI.currency);
+            Assert.IsNotNull(USDFromWebAPI.Rates);
+            Assert.IsNotNull(USDFromWebAPI.table);
+
+            Assert.AreEqual(USDFromWebAPI.code, "USD");
+        }
+        // GBP
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldGetGbpCurrencyPeriodOfTimeAsync()
+        {
+            // Given
+
+            // When
+            string gbpResponseJSON = await clientNBP.getGBPFromPeriodOfTime("2020-03-01", "2020-04-01");
+
+            // Then
+            CurrencyModel GBPFromWebAPI = JsonConvert.DeserializeObject<CurrencyModel>(gbpResponseJSON);
+
+            Assert.IsNotNull(GBPFromWebAPI);
+            Assert.IsNotNull(GBPFromWebAPI.code);
+            Assert.IsNotNull(GBPFromWebAPI.currency);
+            Assert.IsNotNull(GBPFromWebAPI.Rates);
+            Assert.IsNotNull(GBPFromWebAPI.table);
+
+            Assert.AreEqual(GBPFromWebAPI.code, "GBP");
+        }
+
+        // GOLD
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldGetGoldCurrencyPeriodofTimeAsync()
+        {
+            // Given
+
+            // When
+            string goldResponseJSON = await clientNBP.getGoldFromPeriodOfTime("2020-03-01", "2020-04-01");
+
+            // Then
+            GoldModel [] GoldFromWebAPI = JsonConvert.DeserializeObject<GoldModel[]>(goldResponseJSON);
+
+            Assert.IsNotNull(GoldFromWebAPI);
+           
+
+        }
+    } 
 }
