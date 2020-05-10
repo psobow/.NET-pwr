@@ -84,7 +84,7 @@ namespace CurrencyRates_testProject
             // Then
             Assert.AreEqual(eurResponseJSON, "Resource not found - 404");
         }
-
+        // AA test test AAA
 
     }
 }

@@ -6,8 +6,31 @@ Application allows you to get actual EUR, USD, GBP currency rates and current Go
 - Sending GET HTTP requests to [NBP Web API](http://api.nbp.pl/) in order to fetch data about actual and previous EUR, USD, GBP currency rates and also fetching data about gold price. **(accomplished)**
 - Mapping JSON objects into C# objects with [Json.NET](https://www.newtonsoft.com/json) external library. **(accomplished)**
 - Persisting data in the local database, and reading data from local database, implemented with [EntityFramework](https://www.entityframeworktutorial.net/what-is-entityframework.aspx). **(accomplished)**
-- Displaying a chart presenting exchange rates over time based on data from the database. **(pending)**
-- Reliable set of automated tests which guarantee proper application workflow. **(pending)**
+- Displaying a chart presenting exchange rates over time based on data from the database. **(accomplished)**
+- Reliable set of automated tests which guarantee proper application workflow. **(accomplished)**
 
-# Project insight
+
+## Installed dependencies
+| Nr    		| Name 												| version		|
+| :------------:| :------------:									| :------------:|
+| 1.  			| EntityFramework 									| 6.4.0			|
+| 2.  			| Newtonsoft.Json									| 12.0.3		|
+| 3.  			| System.Windows.Controls.DataVisualization.Toolkit | 4.0.0 		|
+| 4.			| Microsoft.NET.Test.Sdk 							| 16.5.0 		|
+| 5.			| MSTest.TestAdapter								| 2.1.0			|
+| 6.			| MSTest.TestFramework								| 2.1.0			|
+
+## Project insight
 ![App](/misc/App-stage1.png)
+
+## USD Chart
+![USD-Chart](/misc/USD-Chart.png)
+
+## EUR Chart
+![EUR-Chart](/misc/EUR-Chart.png)
+
+## GBP Chart
+![GBP-Chart](/misc/GBP-Chart.png)
+
+## Gold Chart
+![GOLD-Chart](/misc/GOLD-Chart.png)
