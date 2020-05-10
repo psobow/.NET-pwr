@@ -605,17 +605,43 @@ namespace CurrencyRates
         private void display_chart_Click(object sender, RoutedEventArgs e)
         {
 
+            var eur = dbContext.findCurrencyByCode("EUR");
+            var usd = dbContext.findCurrencyByCode("USD");
+            var gbp = dbContext.findCurrencyByCode("GBP");
 
+            var gold = dbContext.goldModels;
 
-            CurrencyChartsGold = new CurrencyCharts("GOLD");
-            CurrencyChartsGold.Show();
-            CurrencyChartsUSD = new CurrencyCharts("USD");
-            CurrencyChartsUSD.Show();
-            CurrencyChartsEUR = new CurrencyCharts("EUR");
-            CurrencyChartsEUR.Show();
-            CurrencyChartsGBP = new CurrencyCharts("GBP");
-            CurrencyChartsGBP.Show();
+            if (gold.ToList().Count() != 0)
+            {
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Displaying gold chart");
+                CurrencyChartsGold = new CurrencyCharts("GOLD");
+                CurrencyChartsGold.Show();
+            }
+            else Loger.appBeginTextWithTime(textBox_AppLoger, "Unable to display gold chart. No data in database");
 
+            if (usd != null)
+            {
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Displaying USD chart");
+                CurrencyChartsUSD = new CurrencyCharts("USD");
+                CurrencyChartsUSD.Show();
+            }
+            else Loger.appBeginTextWithTime(textBox_AppLoger, "Unable to display USD chart. No data in database");
+
+            if (eur != null)
+            {
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Displaying EUR chart");
+                CurrencyChartsEUR = new CurrencyCharts("EUR");
+                CurrencyChartsEUR.Show();
+            }
+            else Loger.appBeginTextWithTime(textBox_AppLoger, "Unable to display EUR chart. No data in database");
+
+            if (gbp != null)
+            {
+                Loger.appBeginTextWithTime(textBox_AppLoger, "Displaying GBP chart");
+                CurrencyChartsGBP = new CurrencyCharts("GBP");
+                CurrencyChartsGBP.Show();
+            }
+            else Loger.appBeginTextWithTime(textBox_AppLoger, "Unable to display GBP chart. No data in database");
         }
     }
 }
