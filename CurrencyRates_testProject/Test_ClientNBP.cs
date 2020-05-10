@@ -69,5 +69,5 @@ namespace CurrencyRates_testProject
         // GBP
 
         // GOLD
-    }
+    } 
 }
