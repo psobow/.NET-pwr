@@ -38,6 +38,26 @@ namespace CurrencyRates
             
         }
 
+        public List<Rate> GetDbRates(string code)
+        {
+
+            var currency = findCurrencyByCode(code);
+            if (currency != null)
+            {
+                return this.rates
+                  .Where(Rate => Rate.CurrencyModel.CurrencyModelId == currency.CurrencyModelId).ToList();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<GoldModel> GetGold()
+        {
+            return this.goldModels.ToList();
+        }
+
         /*
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

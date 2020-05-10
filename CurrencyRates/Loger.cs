@@ -14,5 +14,10 @@ namespace CurrencyRates
             DateTime localDate = DateTime.Now;
             textBox.Text = "<" + localDate.ToLongTimeString() + "> " + str + "\n" + textBox.Text;
         }
+
+        internal static void appBeginTextWithTime(TextBox textBox_DatabaseLoger, object p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

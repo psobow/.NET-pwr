@@ -26,7 +26,10 @@ namespace CurrencyRates
 
         private ClientNBP clientNBP = ClientNBP.Instance;
         private CurrencyDbContext dbContext = new CurrencyDbContext();
-
+        private CurrencyCharts CurrencyChartsGold;
+        private CurrencyCharts CurrencyChartsUSD;
+        private CurrencyCharts CurrencyChartsGBP;
+        private CurrencyCharts CurrencyChartsEUR;
         // current currency rates from web API references
         private CurrencyModel EURFromWebAPI;
         private CurrencyModel USDFromWebAPI;
@@ -596,8 +599,23 @@ namespace CurrencyRates
             }
         }
 
+
         #endregion
 
-        
+        private void display_chart_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+            CurrencyChartsGold = new CurrencyCharts("GOLD");
+            CurrencyChartsGold.Show();
+            CurrencyChartsUSD = new CurrencyCharts("USD");
+            CurrencyChartsUSD.Show();
+            CurrencyChartsEUR = new CurrencyCharts("EUR");
+            CurrencyChartsEUR.Show();
+            CurrencyChartsGBP = new CurrencyCharts("GBP");
+            CurrencyChartsGBP.Show();
+
+        }
     }
 }
