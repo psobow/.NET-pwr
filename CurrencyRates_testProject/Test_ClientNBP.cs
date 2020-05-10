@@ -173,5 +173,47 @@ namespace CurrencyRates_testProject
            
 
         }
+
+        // FAILUER SCENARIO 
+
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldReturn404ForEUR()
+        {
+            // Given
+
+            // When
+            string eurResponseJSON = await clientNBP.getEURFromPeriodOfTime("2018-03-01", "2020-04-01");
+
+            // Then
+
+            Assert.AreEqual(eurResponseJSON, "Resource not found - 404");
+        }
+
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldReturn404ForUSD()
+        {
+            // Given
+
+            // When
+            string usdResponseJSON = await clientNBP.getUSDFromPeriodOfTime("2018-03-01", "2020-04-01");
+
+            // Then
+
+            Assert.AreEqual(usdResponseJSON, "Resource not found - 404");
+        }
+
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldReturn404ForGBP()
+        {
+            // Given
+
+            // When
+            string gbpResponseJSON = await clientNBP.getGBPFromPeriodOfTime("2018-03-01", "2020-04-01");
+
+            // Then
+
+            Assert.AreEqual(gbpResponseJSON, "Resource not found - 404");
+        }
+
     } 
 }
