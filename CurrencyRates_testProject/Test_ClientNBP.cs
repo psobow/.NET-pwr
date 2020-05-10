@@ -69,5 +69,22 @@ namespace CurrencyRates_testProject
         // GBP
 
         // GOLD
+
+
+        // FAILURE SCCENARIO
+        //EUR
+        [TestMethod]
+        public async System.Threading.Tasks.Task shouldReturn404ForEuro()
+        {
+            // Given
+
+            // When
+            string eurResponseJSON = await clientNBP.getEURFromPeriodOfTime("2018-03-01", "2020-04-01");
+
+            // Then
+            Assert.AreEqual(eurResponseJSON, "Resource not found - 404");
+        }
+
+
     }
 }
